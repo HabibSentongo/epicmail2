@@ -7,3 +7,7 @@ endpoint_function = Endpoints_functions()
 @app.route('/')
 def home():
     return endpoint_function.home()
+
+@app.route('/api/v1/messages')
+def all_recieved():
+    return endpoint_function.all_recieved()
