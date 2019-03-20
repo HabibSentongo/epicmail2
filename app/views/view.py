@@ -20,3 +20,6 @@ def all_unread():
 def all_sent():
     return endpoint_function.mail_selector('sent')
     
+@app.route('/api/v1/messages/<int:mailID>')
+def specific(mailID):
+    return endpoint_function.mail_selector(mailID)
