@@ -10,6 +10,7 @@ class mail:
         self.parentMessageId = kwargs.get("parentMessageId")
         self.sen_status = kwargs.get("sen_status")
         self.rec_status = "unread"
+        self.senderID = kwargs.get("senderID")
         self.recieverId = kwargs.get("recieverId")
         self.msgdetails = kwargs.get("msgdetails")
 
@@ -21,6 +22,7 @@ class mail:
             "parentMessageId": self.parentMessageId,
             "sen_status": self.sen_status,
             "rec_status": self.rec_status,
+            "senderID": self.senderID,
             "recieverId": self.recieverId,
             "msgdetails": self.msgdetails
         }
