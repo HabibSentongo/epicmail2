@@ -11,3 +11,7 @@ def home():
 @app.route('/api/v1/messages')
 def all_recieved():
     return endpoint_function.all_recieved()
+
+@app.route('/api/v1/messages/unread')
+def all_unread():
+    return endpoint_function.all_recieved()
