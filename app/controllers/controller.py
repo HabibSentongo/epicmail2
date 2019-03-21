@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from ..models.mail_model import Static_strings, mail_list
+from ..models.mail_model import Static_strings, mail_list, Mail
 
 class Endpoints_functions:
     def home(self):
@@ -92,4 +92,53 @@ class Endpoints_functions:
         return jsonify({
             'status': 204,
             'error': Static_strings.error_missing
+        })
+
+    def mail_send(self):
+        if not request.json:
+            return jsonify({
+                'status': 417,
+                'error': Static_strings.error_bad_data
+            })
+        mail_details = request.get_json()
+        if 'senderID' not in mail_details:
+            return jsonify({
+                'status': 403,
+                'error': Static_strings.error_no_id
+            })
+        if 'sen_status' not in mail_details:
+            return jsonify({
+                'status': 417,
+                'error': Static_strings.error_savemode
+            })
+        if mail_details['sen_status']=='sent' and 'recieverId' not in mail_details:
+            return jsonify({
+                'status': 417,
+                'error': Static_strings.error_missdestination
+            })
+        
+        subject = mail_details.get("subject")
+        parentMessageId = mail_details.get("parentMessageId")
+        sen_status = mail_details.get("sen_status")
+        senderID = mail_details.get("senderID")
+        recieverId = mail_details.get("recieverId")
+        msgdetails = mail_details.get("msgdetails")
+
+        new_mail = Mail(
+            subject=subject,
+            parentMessageId= parentMessageId,
+            sen_status= sen_status,
+            senderID= senderID,
+            recieverId= recieverId,
+            msgdetails= msgdetails
+        )
+
+        mail_list.append(
+            new_mail.mail_struct()
+        )
+        return jsonify({
+            'status': 201,
+            'data': [
+                new_mail.mail_struct()
+            ]
         })

@@ -27,3 +27,7 @@ def specific(mailID):
 @app.route('/api/v1/messages/<int:mailID>', methods=['DELETE'])
 def deletemail(mailID):
     return endpoint_function.mail_deletor(mailID)
+
+@app.route('/api/v1/messages', methods=['POST'])
+def sendmail():
+    return endpoint_function.mail_send()
