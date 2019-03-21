@@ -31,3 +31,7 @@ def deletemail(mailID):
 @app.route('/api/v1/messages', methods=['POST'])
 def sendmail():
     return endpoint_function.mail_send()
+
+@app.route('/api/v1/auth/signup', methods=['POST'])
+def userSignup():
+    return endpoint_function.accreate()
