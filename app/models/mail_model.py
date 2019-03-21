@@ -2,7 +2,7 @@ from datetime import datetime
 
 mail_list = []
 
-class mail:
+class Mail:
     def __init__(self, **kwargs):
         self.mail_id = len(mail_list) + 1
         self.created_on = datetime.now()
@@ -14,7 +14,7 @@ class mail:
         self.recieverId = kwargs.get("recieverId")
         self.msgdetails = kwargs.get("msgdetails")
 
-    def mail_struct(self, type):
+    def mail_struct(self):
         return {
             "mail_id": self.mail_id,
             "created_on": self.created_on,
@@ -33,4 +33,5 @@ class Static_strings:
     error_bad_data = 'Provide correct details'
     error_no_id = 'We can\'t identify you, Signin first'
     msg_deleted = 'Record has been deleted'
-    msg_updated = 'Updated record'
+    error_savemode = 'You must send the email or save it as draft'
+    error_missdestination = 'destination address is missing'
