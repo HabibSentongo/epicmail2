@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims)
 from ..models.mail_model import Static_strings, mail_list, Mail
 from ..models.user_model import user_list, User
 
@@ -16,43 +17,44 @@ class Endpoints_functions:
                                 '07 : GET /api/v1/messages/<message-id>',
                                 '08 : DELETE /api/v1/messages/<message-id>']
                                     })
+    def traverse(self, uID, cID, criteria, key):
+        current_Uid = request.get_json()
+        selected = []
+        for mail in mail_list:
+            if criteria == 'null' and key == 'nul':
+                if mail[uID] == current_Uid[cID]:
+                    selected.append(mail)
+
+            if mail[uID] == current_Uid[cID] and mail[criteria] == key:
+                selected.append(mail)
+        return selected
 
     def mail_selector(self, key):
         if not request.json:
             return jsonify({
                 'status': 417,
-                'error': Static_strings.error_no_id
+                'error': Static_strings.error_bad_data
             })
-        current_Uid = request.get_json()
-        if 'user_id' not in current_Uid:
-            return jsonify({
-                'status': 417,
-                'error': Static_strings.error_no_id
-            })
-        selected = []
         if key == 'unread':
-            for mail in mail_list:
-                if mail['recieverId'] == current_Uid['user_id'] and mail['rec_status'] == key:
-                    selected.append(mail)
+            self.traverse('recieverId','user_id', 'rec_status', key)
+            
         elif key == 'read':
-            for mail in mail_list:
-                if mail['recieverId'] == current_Uid['user_id'] and mail['rec_status'] == key:
-                    selected.append(mail)
+            self.traverse('recieverId','user_id', 'rec_status', key)
+
         elif key == 'sent':
-            for mail in mail_list:
-                if mail['senderID'] == current_Uid['user_id'] and mail['sen_status'] == key:
-                    selected.append(mail)
+            self.traverse('recieverId','user_id', 'sen_status', key)
+            
         elif key == 'draft':
-            for mail in mail_list:
-                if mail['senderID'] == current_Uid['user_id'] and mail['sen_status'] == key:
-                    selected.append(mail)
+            self.traverse('senderID','user_id', 'sen_status', key)
+
         elif key == 'none':
-            for mail in mail_list:
-                if mail['recieverId'] == current_Uid['user_id']:
-                    selected.append(mail)
+            self.traverse('recieverId','user_id', 'null', 'null')
+
         else:
+            current_Uid = request.get_json()
+            selected = []
             for mail in mail_list:
-                if mail['mail_id'] == key:
+                if mail['mail_id'] == key and mail['recieverId'] == current_Uid['user_id']:
                     selected.append(mail)
             if len(selected)==0:
                 return jsonify({
@@ -78,13 +80,8 @@ class Endpoints_functions:
                 'error': Static_strings.error_no_id
             })
         current_Uid = request.get_json()
-        if 'user_id' not in current_Uid:
-            return jsonify({
-                'status': 417,
-                'error': Static_strings.error_no_id
-            })
         for mail in mail_list:
-                if mail['mail_id'] == key:
+                if mail['mail_id'] == key and (mail['senderID'] == current_Uid['user_id'] or mail['recieverId'] == current_Uid['user_id']):
                     mail_list.remove(mail)
                     return jsonify({
                         'status': 200,
@@ -102,11 +99,6 @@ class Endpoints_functions:
                 'error': Static_strings.error_bad_data
             })
         mail_details = request.get_json()
-        if 'senderID' not in mail_details:
-            return jsonify({
-                'status': 403,
-                'error': Static_strings.error_no_id
-            })
         if 'sen_status' not in mail_details:
             return jsonify({
                 'status': 417,
@@ -172,9 +164,37 @@ class Endpoints_functions:
         user_list.append(
             new_user.user_struct()
         )
+        tok = create_access_token(new_user.user_struct()['user_id'])
         return jsonify({
-            'status': 201,
-            'data': [
-                new_user.user_struct()
-            ]
-        })
+                    'status': 201,
+                    'data': [{
+                        'token': tok
+                    }]
+                })
+    def signin(self):
+        user_details = request.get_json()
+        if not request.json or 'email_add' not in user_details or 'password' not in user_details:
+            return jsonify({
+                'status': 417,
+                'error': Static_strings.error_bad_data
+            })
+        
+        email_add = user_details.get("email_add")
+        password = user_details.get("password")
+
+        for user in user_list:
+            if user['email_add'] == email_add and user['password'] == password:
+                currentID = user['user_id']
+                tok = create_access_token(currentID)
+                return jsonify({
+                    'status': 200,
+                    'data': [{
+                        'token': tok
+                    }]
+                })
+        return jsonify({
+                    'status': 404,
+                    'data': [{
+                        'error': 'Bad email and/or password'
+                    }]
+                })
