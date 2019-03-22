@@ -1,6 +1,6 @@
 # epicmail2
 
-[![Coverage Status](https://coveralls.io/repos/github/HabibSentongo/epicmail2/badge.svg)](https://coveralls.io/github/HabibSentongo/epicmail2)
+[![Coverage Status](https://coveralls.io/repos/github/HabibSentongo/epicmail2/badge.svg?branch=api)](https://coveralls.io/github/HabibSentongo/epicmail2?branch=api)
 
 [![Build Status](https://travis-ci.com/HabibSentongo/epicmail2.svg?branch=api)](https://travis-ci.com/HabibSentongo/epicmail2)
 
