@@ -7,7 +7,7 @@ The internet is increasingly becoming an integral part of lives. Ever since the 
 
 As EPIC Andelans who work towards advancing human potential and giving back to the society, we wish to empower others by building a web app that helps people exchange messages/information over the internet.
 
-# iReporter API Endpoints
+# EpicMail2 API Endpoints
 This project is about a set of API endpoints for the EpicMail app that the user interface interacts with and store user data and emails in memory using Data Structures.
 ## The Features Include:
 * Sign-up a user.
