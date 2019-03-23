@@ -14,6 +14,7 @@ def home():
     return endpoint_function.home()
 
 @app.route('/api/v1/messages', methods=['GET'])
+@jwt_required
 def all_recieved():
     return endpoint_function.select_email('none')
 
@@ -22,18 +23,22 @@ def all_unread():
     return endpoint_function.select_email('unread')
 
 @app.route('/api/v1/messages/sent', methods=['GET'])
+@jwt_required
 def all_sent():
     return endpoint_function.select_email('sent')
     
 @app.route('/api/v1/messages/<int:email_id>', methods=['GET'])
+@jwt_required
 def specific(email_id):
     return endpoint_function.select_email(email_id)
 
 @app.route('/api/v1/messages/<int:email_id>', methods=['DELETE'])
+@jwt_required
 def deletemail(email_id):
     return endpoint_function.delete_email(email_id)
 
 @app.route('/api/v1/messages', methods=['POST'])
+@jwt_required
 def sendmail():
     return endpoint_function.send_email()
 

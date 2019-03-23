@@ -14,6 +14,31 @@ class TestApi(unittest.TestCase):
         user_list[:] = []
         mail_list[:] = []
 
+    def helper_fn(self, what, to_who):
+        if what == 'signup':
+            token = json.loads(self.client.post('/api/v1/auth/signup', data = json.dumps({
+            "email_add": "habib@sentongo.andela",
+            "first_name": "Habib",
+            "last_name": "Sentongo",
+            "password": "andela"
+            }),content_type = 'application/json').data.decode())['data'][0]['token']
+            return token
+        if what == 'send_email':
+            token = json.loads(self.client.post('/api/v1/auth/signup', data = json.dumps({
+            "email_add": "habib@sentongo.andela",
+            "first_name": "Habib",
+            "last_name": "Sentongo",
+            "password": "andela"
+            }),content_type = 'application/json').data.decode())['data'][0]['token']
+
+            self.client.post('/api/v1/messages', data = json.dumps({
+            "subject": "how cool",
+            "parentMessageId": 4,
+            "sen_status": "sent",
+            "recieverId": to_who,
+            "msgdetails": "sentongo is cool wen u cool"
+            }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token))
+            return token
 
     def test_home_status(self):
         response = self.client.get('/', content_type = 'application/json')
@@ -89,73 +114,81 @@ class TestApi(unittest.TestCase):
         self.assertEqual(type(response['data'][0]['token']), type(''))
 
     def test_send_email_good_request(self):
+        token = self.helper_fn('signup', '')
         response = json.loads(self.client.post('/api/v1/messages', data = json.dumps({
             "subject": "how cool",
             "parentMessageId": 4,
             "sen_status": "sent",
-            "senderID": 2,
-            "recieverId": 1,
+            "recieverId": 2,
             "msgdetails": "sentongo is cool wen u cool"
-        }),content_type = 'application/json').data.decode())
+        }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
         self.assertEqual(response['status'],201)
         self.assertEqual(response['data'][0]['msgdetails'], 'sentongo is cool wen u cool')
 
     def test_send_email_missing_recipient(self):
+        token = self.helper_fn('signup', '')
         response = json.loads(self.client.post('/api/v1/messages', data = json.dumps({
             "subject": "how cool",
             "parentMessageId": 4,
             "sen_status": "sent",
-            "senderID": 2,
             "msgdetails": "sentongo is cool wen u cool"
-        }),content_type = 'application/json').data.decode())
+        }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
         self.assertEqual(response['status'],417)
         self.assertEqual(response['error'], Static_strings.error_missdestination)
 
     def test_send_email_missing_status(self):
+        token = self.helper_fn('signup', '')
         response = json.loads(self.client.post('/api/v1/messages', data = json.dumps({
             "subject": "how cool",
             "parentMessageId": 4,
-            "senderID": 2,
             "recieverId": 1,
             "msgdetails": "sentongo is cool wen u cool"
-        }),content_type = 'application/json').data.decode())
+        }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
         self.assertEqual(response['status'],417)
         self.assertEqual(response['error'], Static_strings.error_savemode)
 
     def test_send_email_no_request_data(self):
-        response = json.loads(self.client.post('/api/v1/messages', data = json.dumps({}),content_type = 'application/json').data.decode())
+        token = self.helper_fn('signup', '')
+        response = json.loads(self.client.post('/api/v1/messages', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
         self.assertEqual(response['status'],417)
         self.assertEqual(response['error'], Static_strings.error_bad_data)
 
     def test_delete_email_that_doesnt_exist(self):
-        response = json.loads(self.client.delete('/api/v1/messages/2', data = json.dumps({
-            "user_id": 3
-        }),content_type = 'application/json').data.decode())
+        token = self.helper_fn('signup', '')
+        response = json.loads(self.client.delete('/api/v1/messages/2', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
         self.assertEqual(response['status'],204)
         self.assertEqual(response['error'], Static_strings.error_missing)
 
-    def test_delete_email_no_request_data(self):
-        response = json.loads(self.client.delete('/api/v1/messages/2', data = json.dumps({}),content_type = 'application/json').data.decode())
-        self.assertEqual(response['status'],417)
-        self.assertEqual(response['error'], Static_strings.error_no_id)
-
     def test_delete_email_good_request(self):
-        self.client.post('/api/v1/messages', data = json.dumps({
-            "subject": "how cool",
-            "parentMessageId": 4,
-            "sen_status": "sent",
-            "senderID": 2,
-            "recieverId": 1,
-            "msgdetails": "sentongo is cool wen u cool"
-        }),content_type = 'application/json')
-        response = json.loads(self.client.delete('/api/v1/messages/1', data = json.dumps({
-            "user_id": 2
-        }),content_type = 'application/json').data.decode())
+        token = self.helper_fn('signup', '')
+        self.helper_fn('send_email', 1)
+        response = json.loads(self.client.delete('/api/v1/messages/1', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
         self.assertEqual(response['status'],200)
         self.assertEqual(response['data'][0]['message'], Static_strings.msg_deleted)
 
-    def test_get_all_no_request_data(self):
-        response = json.loads(self.client.get('/api/v1/messages', data = json.dumps({}),content_type = 'application/json').data.decode())
-        self.assertEqual(response['status'],417)
-        self.assertEqual(response['error'], Static_strings.error_bad_data)
+    def test_get_all_good_request(self):
+        token = self.helper_fn('signup', '')
+        self.helper_fn('send_email', 1)
+        response = json.loads(self.client.get('/api/v1/messages', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],302)
+        self.assertEqual(len(response['data']), 1)
+
+    def test_get_unread_good_request(self):
+        token = self.helper_fn('signup', '')
+        self.helper_fn('send_email', 1)
+        response = json.loads(self.client.get('/api/v1/messages/unread', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],302)
+        self.assertEqual(len(response['data']), 1)
          
+    def test_get_specific_good_request(self):
+        token = self.helper_fn('signup', '')
+        self.helper_fn('send_email', 1)
+        response = json.loads(self.client.get('/api/v1/messages/1', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],302)
+        self.assertEqual(len(response['data']), 1)
+
+    def test_get_sent_good_request(self):
+        token = self.helper_fn('send_email', 1)
+        response = json.loads(self.client.get('/api/v1/messages/sent', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],302)
+        self.assertEqual(len(response['data']), 1)
