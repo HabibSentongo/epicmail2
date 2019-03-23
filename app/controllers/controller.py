@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, json
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims, decode_token)
 from ..models.mail_model import Static_strings, mail_list, Mail
 from ..models.user_model import user_list, User
@@ -17,44 +17,52 @@ class Endpoints_functions:
                                 '07 : GET /api/v1/messages/<message-id>',
                                 '08 : DELETE /api/v1/messages/<message-id>']
                                     })
+
+    def get_id_from_header_token(self):
+        header = request.headers.get('Authorization','')
+        token = header.replace('Bearer ','')
+        if not token:
+            return jsonify({
+                'status': 471,
+                'error': Static_strings.error_no_id
+            })
+        user_id = decode_token(token)['identity'] 
+        return user_id
+
+
     def traverse(self, user_id, current_id, criteria, key):
-        current_Uid = request.get_json()
+        current_Uid = self.get_id_from_header_token()
         selected = []
         for mail in mail_list:
-            if criteria == 'null' and key == 'nul':
-                if mail[user_id] == current_Uid[current_id]:
+            if criteria == 'null' and key == 'null':
+                if mail[user_id] == current_Uid:
                     selected.append(mail)
 
-            if mail[user_id] == current_Uid[current_id] and mail[criteria] == key:
+            if mail[user_id] == current_Uid and mail.get(criteria) == key:
                 selected.append(mail)
         return selected
 
     def select_email(self, key):
-        if not request.json:
-            return jsonify({
-                'status': 417,
-                'error': Static_strings.error_bad_data
-            })
+        selected = []
         if key == 'unread':
-            self.traverse('recieverId','user_id', 'rec_status', key)
+            selected = self.traverse('recieverId','user_id', 'rec_status', key)
             
         elif key == 'read':
-            self.traverse('recieverId','user_id', 'rec_status', key)
+            selected = self.traverse('recieverId','user_id', 'rec_status', key)
 
         elif key == 'sent':
-            self.traverse('recieverId','user_id', 'sen_status', key)
+            selected = self.traverse('senderID','user_id', 'sen_status', key)
             
         elif key == 'draft':
-            self.traverse('senderID','user_id', 'sen_status', key)
+            selected = self.traverse('senderID','user_id', 'sen_status', key)
 
         elif key == 'none':
-            self.traverse('recieverId','user_id', 'null', 'null')
+            selected = self.traverse('recieverId','user_id', 'null', 'null')
 
         else:
-            current_Uid = request.get_json()
-            selected = []
+            current_Uid = self.get_id_from_header_token()
             for mail in mail_list:
-                if mail['mail_id'] == key and mail['recieverId'] == current_Uid['user_id']:
+                if mail['mail_id'] == key and mail['recieverId'] == current_Uid:
                     selected.append(mail)
             if len(selected)==0:
                 return jsonify({
@@ -74,14 +82,9 @@ class Endpoints_functions:
             })
 
     def delete_email(self, key):
-        if not request.json:
-            return jsonify({
-                'status': 417,
-                'error': Static_strings.error_no_id
-            })
-        current_Uid = request.get_json()
+        current_Uid = self.get_id_from_header_token()
         for mail in mail_list:
-                if mail['mail_id'] == key and (mail['senderID'] == current_Uid['user_id'] or mail['recieverId'] == current_Uid['user_id']):
+                if mail['mail_id'] == key and (mail['senderID'] == current_Uid or mail['recieverId'] == current_Uid):
                     mail_list.remove(mail)
                     return jsonify({
                         'status': 200,
@@ -115,7 +118,7 @@ class Endpoints_functions:
         subject = mail_details.get("subject")
         parentMessageId = mail_details.get("parentMessageId")
         sen_status = mail_details.get("sen_status")
-        senderID = mail_details.get("senderID")
+        senderID = self.get_id_from_header_token()
         recieverId = mail_details.get("recieverId")
         msgdetails = mail_details.get("msgdetails")
 
