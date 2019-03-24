@@ -1,0 +1,55 @@
+This Endpoint is for getting all unread emails
+---
+tags:
+  - UNREAD EMAILS
+
+parameters:
+  - in: header
+    name: Authorization
+    description: authorization header
+    required: true
+    type: string
+    schema:
+    id: bearer
+
+security:
+  - JWT:
+      description: Provide JWT token
+      type: apikey
+      schema: bearer
+      name: Authorization
+      in: header
+      template: "Bearer {apikey}"
+      bearerFormat: JWT
+
+responses:
+  200:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        data:
+          type: string
+          enum:
+            - [
+                  {
+                      "created_on": "Sat, 23 Mar 2019 23:45:14 GMT",
+                      "mail_id": 1,
+                      "msgdetails": "sentongo is cool wen u cool",
+                      "parentMessageId": 4,
+                      "rec_status": "unread",
+                      "recieverId": 2,
+                      "sen_status": "sent",
+                      "senderID": 1,
+                      "subject": "how cool"
+                  }
+              ]
+  404:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - 'No records yet!'

@@ -21,11 +21,6 @@ class Endpoints_functions:
     def get_id_from_header_token(self):
         header = request.headers.get('Authorization','')
         token = header.replace('Bearer ','')
-        if not token:
-            return jsonify({
-                'status': 471,
-                'error': Static_strings.error_no_id
-            })
         user_id = decode_token(token)['identity'] 
         return user_id
 
@@ -64,22 +59,23 @@ class Endpoints_functions:
             for mail in mail_list:
                 if mail['mail_id'] == key and mail['recieverId'] == current_Uid:
                     selected.append(mail)
+                    mail['rec_status'] = 'read'
             if len(selected)==0:
                 return jsonify({
-                    'status': 204,
+                    'status': 404,
                     'error': Static_strings.error_missing
-                })
+                }), 404
 
         if len(selected)>0:
             return jsonify({
-                'status': 302,
+                'status': 200,
                 'data': selected
-                })
+                }), 200
         else:
             return jsonify({
-                'status': 204,
+                'status': 404,
                 'error': Static_strings.error_empty
-            })
+            }), 404
 
     def delete_email(self, key):
         current_Uid = self.get_id_from_header_token()
@@ -93,27 +89,27 @@ class Endpoints_functions:
                         }]
                     })
         return jsonify({
-            'status': 204,
+            'status': 404,
             'error': Static_strings.error_missing
-        })
+        }), 404
 
     def send_email(self):
-        if not request.json:
-            return jsonify({
-                'status': 417,
-                'error': Static_strings.error_bad_data
-            })
         mail_details = request.get_json()
+        if not request.json or 'subject' not in mail_details:
+            return jsonify({
+                'status': 400,
+                'error': Static_strings.error_bad_data
+            }), 400
         if 'sen_status' not in mail_details:
             return jsonify({
-                'status': 417,
+                'status': 400,
                 'error': Static_strings.error_savemode
-            })
+            }), 400
         if mail_details['sen_status']=='sent' and 'recieverId' not in mail_details:
             return jsonify({
-                'status': 417,
+                'status': 400,
                 'error': Static_strings.error_missdestination
-            })
+            }), 400
         
         subject = mail_details.get("subject")
         parentMessageId = mail_details.get("parentMessageId")
@@ -139,20 +135,15 @@ class Endpoints_functions:
             'data': [
                 new_mail.mail_struct()
             ]
-        })
+        }), 201
 
     def create_account(self):
-        if not request.json:
-            return jsonify({
-                'status': 417,
-                'error': Static_strings.error_bad_data
-            })
         user_details = request.get_json()
-        if 'email_add' not in user_details or 'first_name' not in user_details or 'last_name' not in user_details or 'password' not in user_details:
+        if not request.json or 'email_add' not in user_details or 'first_name' not in user_details or 'last_name' not in user_details or 'password' not in user_details:
             return jsonify({
-                'status': 403,
+                'status': 400,
                 'error': Static_strings.error_bad_data
-            })
+            }), 400
         
         email_add = user_details.get("email_add")
         first_name = user_details.get("first_name")
@@ -175,14 +166,14 @@ class Endpoints_functions:
                     'data': [{
                         'token': token
                     }]
-                })
+                }), 201
     def signin(self):
         user_details = request.get_json()
         if not request.json or 'email_add' not in user_details or 'password' not in user_details:
             return jsonify({
-                'status': 417,
+                'status': 400,
                 'error': Static_strings.error_bad_data
-            })
+            }), 400
         
         email_add = user_details.get("email_add")
         password = user_details.get("password")
@@ -196,8 +187,8 @@ class Endpoints_functions:
                     'data': [{
                         'token': token
                     }]
-                })
+                }), 200
         return jsonify({
                     'status': 404,
                     'error': 'Bad email and/or password'
-                })
+                }), 404
