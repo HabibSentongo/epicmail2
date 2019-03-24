@@ -30,6 +30,7 @@ This project is about a set of API endpoints for the EpicMail app that the user 
 - [Unit Testing the app](#unit-testing-the-application)
 - [Available Version](#url-versioning)
 - [Deployed Version](#deployed-version)
+- [API Documentation](#deployed-version)
 
 ## Project Planning
 PivotalTracker was used for project Planning and Management. You can find this project's PivotalTracker Board [here](https://www.pivotaltracker.com/n/projects/2319053 "EpicMail2 on PivotalTracker")
@@ -98,3 +99,8 @@ The endpoints of this application have been versioned. The current version is on
 ## Deployed Version
 ### Heroku
 Find the deployed API [here](https://epicmail-sentongo.herokuapp.com/ "epicmail2 on Heroku")
+
+## API Documentation
+
+The endpoints of this application have been well documented using Swagger Flasgger.
+Find the API Documentation [here](https://epicmail-sentongo.herokuapp.com/apidocs/ "EpicMail API Docs")

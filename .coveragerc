@@ -10,3 +10,4 @@ omit =
         */mymodule/tests/*
         *__init__.py
         *tests*
+        */apidocs/*
