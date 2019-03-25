@@ -35,12 +35,12 @@ responses:
                   {
                       "created_on": "Sat, 23 Mar 2019 23:45:14 GMT",
                       "mail_id": 1,
-                      "msgdetails": "sentongo is cool wen u cool",
-                      "parentMessageId": 4,
+                      "message_details": "sentongo is cool wen u cool",
+                      "parent_message_id": 4,
                       "rec_status": "unread",
-                      "recieverId": 2,
+                      "reciever_id": 2,
                       "sen_status": "sent",
-                      "senderID": 1,
+                      "sender_id": 1,
                       "subject": "how cool"
                   }
               ]

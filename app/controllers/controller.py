@@ -1,9 +1,9 @@
 from flask import Flask, jsonify, request, json
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims, decode_token)
-from ..models.mail_model import Static_strings, mail_list, Mail
+from ..models.mail_model import StaticStrings, mail_list, Mail
 from ..models.user_model import user_list, User
 
-class Endpoints_functions:
+class EndpointFunctions:
     def home(self):
         return jsonify({'status': 200,
                         'data': ['Welcome to Sentongo\'s EpicMail!',
@@ -40,91 +40,91 @@ class Endpoints_functions:
     def select_email(self, key):
         selected = []
         if key == 'unread':
-            selected = self.traverse('recieverId','user_id', 'rec_status', key)
+            selected = self.traverse('reciever_id','user_id', 'rec_status', key)
             
         elif key == 'read':
-            selected = self.traverse('recieverId','user_id', 'rec_status', key)
+            selected = self.traverse('reciever_id','user_id', 'rec_status', key)
 
         elif key == 'sent':
-            selected = self.traverse('senderID','user_id', 'sen_status', key)
+            selected = self.traverse('sender_id','user_id', 'sen_status', key)
             
         elif key == 'draft':
-            selected = self.traverse('senderID','user_id', 'sen_status', key)
+            selected = self.traverse('sender_id','user_id', 'sen_status', key)
 
         elif key == 'none':
-            selected = self.traverse('recieverId','user_id', 'null', 'null')
+            selected = self.traverse('reciever_id','user_id', 'null', 'null')
 
         else:
             current_Uid = self.get_id_from_header_token()
             for mail in mail_list:
-                if mail['mail_id'] == key and mail['recieverId'] == current_Uid:
+                if mail['mail_id'] == key and mail['reciever_id'] == current_Uid:
                     selected.append(mail)
                     mail['rec_status'] = 'read'
             if len(selected)==0:
                 return jsonify({
                     'status': 404,
-                    'error': Static_strings.error_missing
-                }), 404
+                    'error': StaticStrings.error_missing
+                })
 
         if len(selected)>0:
             return jsonify({
                 'status': 200,
                 'data': selected
-                }), 200
+                })
         else:
             return jsonify({
                 'status': 404,
-                'error': Static_strings.error_empty
-            }), 404
+                'error': StaticStrings.error_empty
+            })
 
     def delete_email(self, key):
         current_Uid = self.get_id_from_header_token()
         for mail in mail_list:
-                if mail['mail_id'] == key and (mail['senderID'] == current_Uid or mail['recieverId'] == current_Uid):
+                if mail['mail_id'] == key and (mail['sender_id'] == current_Uid or mail['reciever_id'] == current_Uid):
                     mail_list.remove(mail)
                     return jsonify({
                         'status': 200,
                         'data': [{
-                            'message': Static_strings.msg_deleted
+                            'message': StaticStrings.msg_deleted
                         }]
                     })
         return jsonify({
             'status': 404,
-            'error': Static_strings.error_missing
-        }), 404
+            'error': StaticStrings.error_missing
+        })
 
     def send_email(self):
         mail_details = request.get_json()
         if not request.json or 'subject' not in mail_details:
             return jsonify({
                 'status': 400,
-                'error': Static_strings.error_bad_data
-            }), 400
+                'error': StaticStrings.error_bad_data
+            })
         if 'sen_status' not in mail_details:
             return jsonify({
                 'status': 400,
-                'error': Static_strings.error_savemode
-            }), 400
-        if mail_details['sen_status']=='sent' and 'recieverId' not in mail_details:
+                'error': StaticStrings.error_savemode
+            })
+        if mail_details['sen_status']=='sent' and 'reciever_id' not in mail_details:
             return jsonify({
                 'status': 400,
-                'error': Static_strings.error_missdestination
-            }), 400
+                'error': StaticStrings.error_missdestination
+            })
         
         subject = mail_details.get("subject")
-        parentMessageId = mail_details.get("parentMessageId")
+        parent_message_id = mail_details.get("parent_message_id")
         sen_status = mail_details.get("sen_status")
-        senderID = self.get_id_from_header_token()
-        recieverId = mail_details.get("recieverId")
-        msgdetails = mail_details.get("msgdetails")
+        sender_id = self.get_id_from_header_token()
+        reciever_id = mail_details.get("reciever_id")
+        message_details = mail_details.get("message_details")
 
         new_mail = Mail(
             subject=subject,
-            parentMessageId= parentMessageId,
+            parent_message_id= parent_message_id,
             sen_status= sen_status,
-            senderID= senderID,
-            recieverId= recieverId,
-            msgdetails= msgdetails
+            sender_id= sender_id,
+            reciever_id= reciever_id,
+            message_details= message_details
         )
 
         mail_list.append(
@@ -135,23 +135,30 @@ class Endpoints_functions:
             'data': [
                 new_mail.mail_struct()
             ]
-        }), 201
+        })
 
     def create_account(self):
         user_details = request.get_json()
-        if not request.json or 'email_add' not in user_details or 'first_name' not in user_details or 'last_name' not in user_details or 'password' not in user_details:
+        if not request.json or 'email_address' not in user_details or 'first_name' not in user_details or 'last_name' not in user_details or 'password' not in user_details:
             return jsonify({
                 'status': 400,
-                'error': Static_strings.error_bad_data
-            }), 400
+                'error': StaticStrings.error_bad_data
+            })
+
+        for user in user_list:
+            if user['email_address'] == user_details['email_address']:
+                return jsonify({
+                'status': 400,
+                'error': StaticStrings.error_email_exist
+            })
         
-        email_add = user_details.get("email_add")
+        email_address = user_details.get("email_address")
         first_name = user_details.get("first_name")
         last_name = user_details.get("last_name")
         password = user_details.get("password")
 
         new_user = User(
-            email_add=email_add,
+            email_address=email_address,
             first_name= first_name,
             last_name= last_name,
             password= password
@@ -166,20 +173,20 @@ class Endpoints_functions:
                     'data': [{
                         'token': token
                     }]
-                }), 201
+                })
     def signin(self):
         user_details = request.get_json()
-        if not request.json or 'email_add' not in user_details or 'password' not in user_details:
+        if not request.json or 'email_address' not in user_details or 'password' not in user_details:
             return jsonify({
                 'status': 400,
-                'error': Static_strings.error_bad_data
-            }), 400
+                'error': StaticStrings.error_bad_data
+            })
         
-        email_add = user_details.get("email_add")
+        email_address = user_details.get("email_address")
         password = user_details.get("password")
 
         for user in user_list:
-            if user['email_add'] == email_add and user['password'] == password:
+            if user['email_address'] == email_address and user['password'] == password:
                 currentID = user['user_id']
                 token = create_access_token(currentID)
                 return jsonify({
@@ -187,8 +194,8 @@ class Endpoints_functions:
                     'data': [{
                         'token': token
                     }]
-                }), 200
+                })
         return jsonify({
                     'status': 404,
                     'error': 'Bad email and/or password'
-                }), 404
+                })

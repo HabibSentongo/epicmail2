@@ -14,16 +14,16 @@ parameters:
         - "subject"
         - "sen_status"
       properties:
-        parentMessageId:
+        parent_message_id:
           type: "int"
           example: 4
         sen_status:
           type: "string"
           example: "sent"
-        recieverId:
+        reciever_id:
           type: "int"
           example: 2
-        msgdetails:
+        message_details:
           type: "string"
           example: "sentongo is cool wen u cool"
   - in: header
@@ -57,12 +57,12 @@ responses:
                   {
                       "created_on": "Sat, 23 Mar 2019 23:45:14 GMT",
                       "mail_id": 1,
-                      "msgdetails": "sentongo is cool wen u cool",
-                      "parentMessageId": 4,
+                      "message_details": "sentongo is cool wen u cool",
+                      "parent_message_id": 4,
                       "rec_status": "unread",
-                      "recieverId": 2,
+                      "reciever_id": 2,
                       "sen_status": "sent",
-                      "senderID": 1,
+                      "sender_id": 1,
                       "subject": "how cool"
                   }
               ]
