@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims)
 from flasgger import Swagger, swag_from
-from ..controllers.controller import Endpoints_functions
+from ..controllers.controller import EndpointFunctions
 
 app = Flask(__name__)
 swagger = Swagger(app)
@@ -9,7 +9,7 @@ swagger = Swagger(app)
 app.config['JWT_SECRET_KEY'] = 'sentongo'
 jwt = JWTManager(app)
 
-endpoint_function = Endpoints_functions()
+endpoint_function = EndpointFunctions()
 
 @app.route('/', methods=['GET'])
 @swag_from('../apidocs/index.yml', methods=['GET'])

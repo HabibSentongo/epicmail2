@@ -11,10 +11,10 @@ parameters:
     schema:
       type: object
       required:
-        - "email_add"
+        - "email_address"
         - "password"
       properties:
-        email_add:
+        email_address:
           type: "string"
           example: "habib@andela.epic"
         password:
