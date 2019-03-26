@@ -1,21 +1,24 @@
 from flask import Flask, jsonify, request, json
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims, decode_token)
-from ..models.mail_model import StaticStrings, mail_list, Mail
-from ..models.user_model import user_list, User
+from database.db import DBmigrate
+from ..models.mail_model import StaticStrings
+
+db_obj = DBmigrate()
+db_obj.create_tables()
 
 class EndpointFunctions:
     def home(self):
         return jsonify({'status': 200,
                         'data': ['Welcome to Sentongo\'s EpicMail!',
                                 'Endpoints',
-                                '01 : POST /api/v1/auth/signup',
-                                '02 : POST /api/v1/auth/login',
-                                '03 : POST /api/v1/messages',
-                                '04 : GET /api/v1/messages',
-                                '05 : GET /api/v1/messages/unread',
-                                '06 : GET /api/v1/messages/sent',
-                                '07 : GET /api/v1/messages/<message-id>',
-                                '08 : DELETE /api/v1/messages/<message-id>']
+                                '01 : POST /api/v2/auth/signup',
+                                '02 : POST /api/v2/auth/login',
+                                '03 : POST /api/v2/messages',
+                                '04 : GET /api/v2/messages',
+                                '05 : GET /api/v2/messages/unread',
+                                '06 : GET /api/v2/messages/sent',
+                                '07 : GET /api/v2/messages/<message-id>',
+                                '08 : DELETE /api/v2/messages/<message-id>']
                                     })
 
     def get_id_from_header_token(self):
@@ -24,47 +27,38 @@ class EndpointFunctions:
         user_id = decode_token(token)['identity'] 
         return user_id
 
-
-    def traverse(self, user_id, current_id, criteria, key):
+    def select_email(self, key):
         current_Uid = self.get_id_from_header_token()
         selected = []
-        for mail in mail_list:
-            if criteria == 'null' and key == 'null':
-                if mail[user_id] == current_Uid:
-                    selected.append(mail)
-
-            if mail[user_id] == current_Uid and mail.get(criteria) == key:
-                selected.append(mail)
-        return selected
-
-    def select_email(self, key):
-        selected = []
         if key == 'unread':
-            selected = self.traverse('reciever_id','user_id', 'rec_status', key)
+            db_obj.my_cursor.execute(StaticStrings.selector.format('emails', 'reciever_id', current_Uid, 'reciever_status', key))
+            selected = db_obj.my_cursor.fetchall()
             
         elif key == 'read':
-            selected = self.traverse('reciever_id','user_id', 'rec_status', key)
+            db_obj.my_cursor.execute(StaticStrings.selector.format('emails', 'reciever_id', current_Uid, 'reciever_status', key))
+            selected = db_obj.my_cursor.fetchall()
 
         elif key == 'sent':
-            selected = self.traverse('sender_id','user_id', 'sen_status', key)
-            
+            db_obj.my_cursor.execute(StaticStrings.selector.format('emails', 'sender_id', current_Uid, 'sender_status', key))
+            selected = db_obj.my_cursor.fetchall()
+
         elif key == 'draft':
-            selected = self.traverse('sender_id','user_id', 'sen_status', key)
+            db_obj.my_cursor.execute(StaticStrings.selector.format('emails', 'sender_id', current_Uid, 'sender_status', key))
+            selected = db_obj.my_cursor.fetchall()
 
         elif key == 'none':
-            selected = self.traverse('reciever_id','user_id', 'null', 'null')
+            db_obj.my_cursor.execute(StaticStrings.selector.format('emails', 'reciever_id', current_Uid, 'sender_status', 'sent'))
+            selected = db_obj.my_cursor.fetchall()
 
         else:
-            current_Uid = self.get_id_from_header_token()
-            for mail in mail_list:
-                if mail['mail_id'] == key and mail['reciever_id'] == current_Uid:
-                    selected.append(mail)
-                    mail['rec_status'] = 'read'
+            db_obj.my_cursor.execute(StaticStrings.selector.format('emails', 'reciever_id', current_Uid, 'mail_id', key))
+            selected = db_obj.my_cursor.fetchall()
             if len(selected)==0:
                 return jsonify({
                     'status': 404,
                     'error': StaticStrings.error_missing
                 })
+            db_obj.my_cursor.execute(StaticStrings.updater.format('emails' ,'reciever_status', 'read', 'mail_id', key))
 
         if len(selected)>0:
             return jsonify({
@@ -79,33 +73,35 @@ class EndpointFunctions:
 
     def delete_email(self, key):
         current_Uid = self.get_id_from_header_token()
-        for mail in mail_list:
-                if mail['mail_id'] == key and (mail['sender_id'] == current_Uid or mail['reciever_id'] == current_Uid):
-                    mail_list.remove(mail)
-                    return jsonify({
-                        'status': 200,
-                        'data': [{
-                            'message': StaticStrings.msg_deleted
-                        }]
-                    })
+        db_obj.my_cursor.execute(StaticStrings.two_id_selector.format('emails','mail_id',key,'reciever_id',current_Uid,'sender_id',current_Uid))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)>0:
+            db_obj.my_cursor.execute(StaticStrings.deleter.format('emails' , 'mail_id', key))
+            return jsonify({
+                'status': 200,
+                'data': [{
+                    'message': StaticStrings.msg_deleted
+                }]
+            })
         return jsonify({
             'status': 404,
             'error': StaticStrings.error_missing
         })
 
     def send_email(self):
+        current_Uid = self.get_id_from_header_token()
         mail_details = request.get_json()
         if not request.json or 'subject' not in mail_details:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_bad_data
             })
-        if 'sen_status' not in mail_details:
+        if 'sender_status' not in mail_details:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_savemode
             })
-        if mail_details['sen_status']=='sent' and 'reciever_id' not in mail_details:
+        if 'reciever_id' not in mail_details or mail_details['reciever_id']==current_Uid:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_missdestination
@@ -113,28 +109,19 @@ class EndpointFunctions:
         
         subject = mail_details.get("subject")
         parent_message_id = mail_details.get("parent_message_id")
-        sen_status = mail_details.get("sen_status")
+        sender_status = mail_details.get("sender_status")
+        reciever_status = ''
+        if sender_status == 'sent':
+            reciever_status = 'unread'
         sender_id = self.get_id_from_header_token()
         reciever_id = mail_details.get("reciever_id")
         message_details = mail_details.get("message_details")
 
-        new_mail = Mail(
-            subject=subject,
-            parent_message_id= parent_message_id,
-            sen_status= sen_status,
-            sender_id= sender_id,
-            reciever_id= reciever_id,
-            message_details= message_details
-        )
-
-        mail_list.append(
-            new_mail.mail_struct()
-        )
+        db_obj.my_cursor.execute(StaticStrings.create_email.format(subject, parent_message_id, sender_status, sender_id, reciever_id, reciever_status, message_details))
+        new_mail = db_obj.my_cursor.fetchall()
         return jsonify({
             'status': 201,
-            'data': [
-                new_mail.mail_struct()
-            ]
+            'data': new_mail
         })
 
     def create_account(self):
@@ -145,29 +132,22 @@ class EndpointFunctions:
                 'error': StaticStrings.error_bad_data
             })
 
-        for user in user_list:
-            if user['email_address'] == user_details['email_address']:
-                return jsonify({
-                'status': 400,
-                'error': StaticStrings.error_email_exist
-            })
-        
         email_address = user_details.get("email_address")
         first_name = user_details.get("first_name")
         last_name = user_details.get("last_name")
         password = user_details.get("password")
 
-        new_user = User(
-            email_address=email_address,
-            first_name= first_name,
-            last_name= last_name,
-            password= password
-        )
-
-        user_list.append(
-            new_user.user_struct()
-        )
-        token = create_access_token(new_user.user_struct()['user_id'])
+        db_obj.my_cursor.execute(StaticStrings.single_selector.format('users', 'email_address', email_address))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)>0:
+            return jsonify({
+                'status': 400,
+                'error': StaticStrings.error_email_exist
+            })
+        
+        db_obj.my_cursor.execute(StaticStrings.create_user.format(email_address,first_name, last_name, password))
+        user_id = db_obj.my_cursor.fetchall()[0]['user_id']
+        token = create_access_token(user_id)
         return jsonify({
                     'status': 201,
                     'data': [{
@@ -185,16 +165,17 @@ class EndpointFunctions:
         email_address = user_details.get("email_address")
         password = user_details.get("password")
 
-        for user in user_list:
-            if user['email_address'] == email_address and user['password'] == password:
-                currentID = user['user_id']
-                token = create_access_token(currentID)
-                return jsonify({
-                    'status': 200,
-                    'data': [{
-                        'token': token
-                    }]
-                })
+        db_obj.my_cursor.execute(StaticStrings.two_string_selector.format('users','email_address',email_address,'password',password))
+        data = db_obj.my_cursor.fetchall()
+        if data:
+            currentID = data[0]['user_id']
+            token = create_access_token(currentID)
+            return jsonify({
+                'status': 200,
+                'data': [{
+                    'token': token
+                }]
+            })
         return jsonify({
                     'status': 404,
                     'error': 'Bad email and/or password'
