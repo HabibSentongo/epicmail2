@@ -69,3 +69,27 @@ class Endpoints_functions:
                 'status': 204,
                 'error': Static_strings.error_empty
             })
+
+    def mail_deletor(self, key):
+        if not request.json:
+            return jsonify({
+                'status': 417,
+                'error': Static_strings.error_no_id
+            })
+        current_Uid = request.get_json()
+        if 'user_id' not in current_Uid:
+            return jsonify({
+                'status': 417,
+                'error': Static_strings.error_no_id
+            })
+        for mail in mail_list:
+                if mail['mail_id'] == key:
+                    mail_list.remove(mail)
+                    return jsonify({
+                        'status': 200,
+                        'data': [Static_strings.msg_deleted]
+                    })
+        return jsonify({
+            'status': 204,
+            'error': Static_strings.error_missing
+        })
