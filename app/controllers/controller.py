@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from ..models.mail_model import Static_strings, mail_list, Mail
+from ..models.user_model import user_list, User
 
 class Endpoints_functions:
     def home(self):
@@ -140,5 +141,40 @@ class Endpoints_functions:
             'status': 201,
             'data': [
                 new_mail.mail_struct()
+            ]
+        })
+
+    def accreate(self):
+        if not request.json:
+            return jsonify({
+                'status': 417,
+                'error': Static_strings.error_bad_data
+            })
+        user_details = request.get_json()
+        if 'email_add' not in user_details or 'first_name' not in user_details or 'last_name' not in user_details or 'password' not in user_details:
+            return jsonify({
+                'status': 403,
+                'error': Static_strings.error_bad_data
+            })
+        
+        email_add = user_details.get("email_add")
+        first_name = user_details.get("first_name")
+        last_name = user_details.get("last_name")
+        password = user_details.get("password")
+
+        new_user = User(
+            email_add=email_add,
+            first_name= first_name,
+            last_name= last_name,
+            password= password
+        )
+
+        user_list.append(
+            new_user.user_struct()
+        )
+        return jsonify({
+            'status': 201,
+            'data': [
+                new_user.user_struct()
             ]
         })
