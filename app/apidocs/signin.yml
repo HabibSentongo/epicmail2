@@ -1,0 +1,55 @@
+This Endpoint is for user Signin
+---
+tags:
+  - SIGNIN
+
+parameters:
+  - name: body
+    description: This is the new user information provided for signin
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "email_address"
+        - "password"
+      properties:
+        email_address:
+          type: "string"
+          example: "habib@andela.epic"
+        password:
+          type: "string"
+          example: "andela"
+
+responses:
+  200:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        data:
+          type: string
+          enum:
+            - [
+                  {
+                      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTMzODQ5ODgsIm5iZiI6MTU1MzM4NDk4OCwianRpIjoiNDdjNjhjNTYtNzMzMi00NDdjLTlkNmItYzhmNzhiYzY1ZmMwIiwiZXhwIjoxNTUzMzg1ODg4LCJpZGVudGl0eSI6MiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.-7_MGPf7avGrkXZuAElevNFVnwloDves-LbW86nUfZg"
+                  }
+              ]
+  400:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - 'Provide correct details'
+  404:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - 'Bad email and/or password'

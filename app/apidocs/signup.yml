@@ -1,0 +1,54 @@
+This Endpoint is for user Signup
+---
+tags:
+  - SIGNUP
+
+parameters:
+  - name: body
+    description: This is the new user information provided for signup
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "email_address"
+        - "first_name"
+        - "last_name"
+        - "password"
+      properties:
+        email_address:
+          type: "string"
+          example: "habib@andela.epic"
+        first_name:
+          type: "string"
+          example: "bibah"
+        last_name:
+          type: "string"
+          example: "ognotnes"
+        password:
+          type: "string"
+          example: "andela"
+
+responses:
+  201:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        data:
+          type: string
+          enum:
+            - [
+                  {
+                      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTMzODQ5ODgsIm5iZiI6MTU1MzM4NDk4OCwianRpIjoiNDdjNjhjNTYtNzMzMi00NDdjLTlkNmItYzhmNzhiYzY1ZmMwIiwiZXhwIjoxNTUzMzg1ODg4LCJpZGVudGl0eSI6MiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.-7_MGPf7avGrkXZuAElevNFVnwloDves-LbW86nUfZg"
+                  }
+              ]
+  400:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - 'Provide correct details'
