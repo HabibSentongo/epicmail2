@@ -16,34 +16,7 @@ class Endpoints_functions:
                                 '08 : DELETE /api/v1/messages/<message-id>']
                                     })
 
-    # def all_recieved(self):
-    #     if not request.json:
-    #         return jsonify({
-    #             'status': 417,
-    #             'error': Static_strings.error_no_id
-    #         })
-    #     current_Uid = request.get_json()
-    #     if 'user_id' not in current_Uid:
-    #         return jsonify({
-    #             'status': 417,
-    #             'error': Static_strings.error_no_id
-    #         })
-    #     selected = []
-    #     for mail in mail_list:
-    #         if mail['recieverId'] == current_Uid['user_id']:
-    #             selected.append(mail)
-    #     if len(selected)>0:
-    #         return jsonify({
-    #             'status': 302,
-    #             'data': selected
-    #             })
-    #     else:
-    #         return jsonify({
-    #             'status': 204,
-    #             'error': Static_strings.error_empty
-    #         })
-
-    def mail_selector(self, status):
+    def mail_selector(self, key):
         if not request.json:
             return jsonify({
                 'status': 417,
@@ -56,26 +29,35 @@ class Endpoints_functions:
                 'error': Static_strings.error_no_id
             })
         selected = []
-        if status == 'unread':
+        if key == 'unread':
             for mail in mail_list:
-                if mail['recieverId'] == current_Uid['user_id'] and mail['rec_status'] == 'unread':
+                if mail['recieverId'] == current_Uid['user_id'] and mail['rec_status'] == key:
                     selected.append(mail)
-        elif status == 'read':
+        elif key == 'read':
             for mail in mail_list:
-                if mail['recieverId'] == current_Uid['user_id'] and mail['rec_status'] == 'read':
+                if mail['recieverId'] == current_Uid['user_id'] and mail['rec_status'] == key:
                     selected.append(mail)
-        elif status == 'sent':
+        elif key == 'sent':
             for mail in mail_list:
-                if mail['senderID'] == current_Uid['user_id'] and mail['sen_status'] == 'sent':
+                if mail['senderID'] == current_Uid['user_id'] and mail['sen_status'] == key:
                     selected.append(mail)
-        elif status == 'draft':
+        elif key == 'draft':
             for mail in mail_list:
-                if mail['senderID'] == current_Uid['user_id'] and mail['sen_status'] == 'draft':
+                if mail['senderID'] == current_Uid['user_id'] and mail['sen_status'] == key:
                     selected.append(mail)
-        elif status == 'none':
+        elif key == 'none':
             for mail in mail_list:
                 if mail['recieverId'] == current_Uid['user_id']:
                     selected.append(mail)
+        else:
+            for mail in mail_list:
+                if mail['mail_id'] == key:
+                    selected.append(mail)
+            if len(selected)==0:
+                return jsonify({
+                    'status': 204,
+                    'error': Static_strings.error_missing
+                })
 
         if len(selected)>0:
             return jsonify({
