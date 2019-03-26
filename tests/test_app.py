@@ -18,11 +18,11 @@ class TestApi(unittest.TestCase):
         expected = ['Welcome to Sentongo\'s EpicMail!',
                     'Endpoints',
                     '01 : POST /api/v1/auth/signup',
-                    '02 : POST /api/v1/auth/login,
+                    '02 : POST /api/v1/auth/login',
                     '03 : POST /api/v1/messages',
                     '04 : GET /api/v1/messages',
                     '05 : GET /api/v1/messages/unread',
                     '06 : GET /api/v1/messages/sent',
                     '07 : GET /api/v1/messages/<message-id>',
                     '08 : DELETE /api/v1/messages/<message-id>']
-        self.assertEqual(returndata['message'], expected)
+        self.assertEqual(returndata['data'], expected)
