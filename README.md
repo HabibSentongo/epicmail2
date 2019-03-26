@@ -1,6 +1,6 @@
 # EpicMail2
 
-[![Build Status](https://travis-ci.com/HabibSentongo/epicmail2.svg?branch=api)](https://travis-ci.com/HabibSentongo/epicmail2)      [![Maintainability](https://api.codeclimate.com/v1/badges/c808281d4382afa9f7ba/maintainability)](https://codeclimate.com/github/HabibSentongo/epicmail2/maintainability)        [![Coverage Status](https://coveralls.io/repos/github/HabibSentongo/epicmail2/badge.svg?branch=api)](https://coveralls.io/github/HabibSentongo/epicmail2?branch=api)
+[![Build Status](https://travis-ci.com/HabibSentongo/epicmail2.svg?branch=api)](https://travis-ci.com/HabibSentongo/epicmail2)      [![Maintainability](https://api.codeclimate.com/v2/badges/c808281d4382afa9f7ba/maintainability)](https://codeclimate.com/github/HabibSentongo/epicmail2/maintainability)        [![Coverage Status](https://coveralls.io/repos/github/HabibSentongo/epicmail2/badge.svg?branch=api)](https://coveralls.io/github/HabibSentongo/epicmail2?branch=api)
 
 ## Project Overview
 The internet is increasingly becoming an integral part of lives. Ever since the invention of electronic mail by Ray Tomlinson, emails have grown to become the primary medium of exchanging information over the internet between two or more people, until the advent of Instant Messaging (IM) Apps.

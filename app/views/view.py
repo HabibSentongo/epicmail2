@@ -16,48 +16,48 @@ endpoint_function = EndpointFunctions()
 def home():
     return endpoint_function.home()
 
-@app.route('/api/v1/messages', methods=['GET'])
+@app.route('/api/v2/messages', methods=['GET'])
 @jwt_required
 @swag_from('../apidocs/get_recieved.yml', methods=['GET'])
 def all_recieved():
     return endpoint_function.select_email('none')
 
-@app.route('/api/v1/messages/unread', methods=['GET'])
+@app.route('/api/v2/messages/unread', methods=['GET'])
 @jwt_required
 @swag_from('../apidocs/get_unread.yml', methods=['GET'])
 def all_unread():
     return endpoint_function.select_email('unread')
 
-@app.route('/api/v1/messages/sent', methods=['GET'])
+@app.route('/api/v2/messages/sent', methods=['GET'])
 @jwt_required
 @swag_from('../apidocs/get_sent.yml', methods=['GET'])
 def all_sent():
     return endpoint_function.select_email('sent')
     
-@app.route('/api/v1/messages/<int:email_id>', methods=['GET'])
+@app.route('/api/v2/messages/<int:mail_id>', methods=['GET'])
 @jwt_required
 @swag_from('../apidocs/get_specific.yml', methods=['GET'])
-def specific(email_id):
-    return endpoint_function.select_email(email_id)
+def specific(mail_id):
+    return endpoint_function.select_email(mail_id)
 
-@app.route('/api/v1/messages/<int:email_id>', methods=['DELETE'])
+@app.route('/api/v2/messages/<int:mail_id>', methods=['DELETE'])
 @jwt_required
 @swag_from('../apidocs/delete_email.yml', methods=['DELETE'])
-def deletemail(email_id):
-    return endpoint_function.delete_email(email_id)
+def deletemail(mail_id):
+    return endpoint_function.delete_email(mail_id)
 
-@app.route('/api/v1/messages', methods=['POST'])
+@app.route('/api/v2/messages', methods=['POST'])
 @jwt_required
 @swag_from('../apidocs/send_email.yml', methods=['POST'])
 def sendmail():
     return endpoint_function.send_email()
 
-@app.route('/api/v1/auth/signup', methods=['POST'])
+@app.route('/api/v2/auth/signup', methods=['POST'])
 @swag_from('../apidocs/signup.yml', methods=['POST'])
 def userSignup():
     return endpoint_function.create_account()
 
-@app.route('/api/v1/auth/signin', methods=['POST'])
+@app.route('/api/v2/auth/signin', methods=['POST'])
 @swag_from('../apidocs/signin.yml', methods=['POST'])
 def userSignin():
     return endpoint_function.signin()
