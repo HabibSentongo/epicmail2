@@ -13,7 +13,7 @@ class DBmigrate:
             self.db_name = 'epicmail_db'
         print(self.db_name)
         self.user_name = 'postgres'
-        self.user_password = 'root'
+        self.user_password = ''
         self.host = '127.0.0.1'
         self.port = '5432'
         self.db_connect = psycopg2.connect(
