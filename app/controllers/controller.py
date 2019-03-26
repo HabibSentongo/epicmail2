@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims)
+from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims, decode_token)
 from ..models.mail_model import Static_strings, mail_list, Mail
 from ..models.user_model import user_list, User
 
@@ -17,19 +17,19 @@ class Endpoints_functions:
                                 '07 : GET /api/v1/messages/<message-id>',
                                 '08 : DELETE /api/v1/messages/<message-id>']
                                     })
-    def traverse(self, uID, cID, criteria, key):
+    def traverse(self, user_id, current_id, criteria, key):
         current_Uid = request.get_json()
         selected = []
         for mail in mail_list:
             if criteria == 'null' and key == 'nul':
-                if mail[uID] == current_Uid[cID]:
+                if mail[user_id] == current_Uid[current_id]:
                     selected.append(mail)
 
-            if mail[uID] == current_Uid[cID] and mail[criteria] == key:
+            if mail[user_id] == current_Uid[current_id] and mail[criteria] == key:
                 selected.append(mail)
         return selected
 
-    def mail_selector(self, key):
+    def select_email(self, key):
         if not request.json:
             return jsonify({
                 'status': 417,
@@ -73,7 +73,7 @@ class Endpoints_functions:
                 'error': Static_strings.error_empty
             })
 
-    def mail_deletor(self, key):
+    def delete_email(self, key):
         if not request.json:
             return jsonify({
                 'status': 417,
@@ -85,14 +85,16 @@ class Endpoints_functions:
                     mail_list.remove(mail)
                     return jsonify({
                         'status': 200,
-                        'data': [Static_strings.msg_deleted]
+                        'data': [{
+                            'message': Static_strings.msg_deleted
+                        }]
                     })
         return jsonify({
             'status': 204,
             'error': Static_strings.error_missing
         })
 
-    def mail_send(self):
+    def send_email(self):
         if not request.json:
             return jsonify({
                 'status': 417,
@@ -136,7 +138,7 @@ class Endpoints_functions:
             ]
         })
 
-    def accreate(self):
+    def create_account(self):
         if not request.json:
             return jsonify({
                 'status': 417,
@@ -164,11 +166,11 @@ class Endpoints_functions:
         user_list.append(
             new_user.user_struct()
         )
-        tok = create_access_token(new_user.user_struct()['user_id'])
+        token = create_access_token(new_user.user_struct()['user_id'])
         return jsonify({
                     'status': 201,
                     'data': [{
-                        'token': tok
+                        'token': token
                     }]
                 })
     def signin(self):
@@ -185,16 +187,14 @@ class Endpoints_functions:
         for user in user_list:
             if user['email_add'] == email_add and user['password'] == password:
                 currentID = user['user_id']
-                tok = create_access_token(currentID)
+                token = create_access_token(currentID)
                 return jsonify({
                     'status': 200,
                     'data': [{
-                        'token': tok
+                        'token': token
                     }]
                 })
         return jsonify({
                     'status': 404,
-                    'data': [{
-                        'error': 'Bad email and/or password'
-                    }]
+                    'error': 'Bad email and/or password'
                 })
