@@ -1,0 +1,12 @@
+[run]
+
+[report]
+omit =
+        */venv/*
+        */python?.?/*
+        */site-packages/nose/*
+        */__pycache__/*
+        *.pyc
+        */mymodule/tests/*
+        *__init__.py
+        *tests*
