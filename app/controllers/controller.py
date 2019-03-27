@@ -88,7 +88,7 @@ class EndpointFunctions:
             'error': StaticStrings.error_missing
         })
 
-    def send_email(self):
+    def send_email(self, recipient_table):
         current_Uid = self.get_id_from_header_token()
         mail_details = request.get_json()
         if not request.json or 'subject' not in mail_details:
@@ -117,7 +117,7 @@ class EndpointFunctions:
         reciever_id = mail_details.get("reciever_id")
         message_details = mail_details.get("message_details")
 
-        db_obj.my_cursor.execute(StaticStrings.create_email.format(subject, parent_message_id, sender_status, sender_id, reciever_id, reciever_status, message_details))
+        db_obj.my_cursor.execute(StaticStrings.create_email.format(recipient_table,subject, parent_message_id, sender_status, sender_id, reciever_id, reciever_status, message_details))
         new_mail = db_obj.my_cursor.fetchall()
         return jsonify({
             'status': 201,
@@ -277,6 +277,53 @@ class EndpointFunctions:
                         'message': 'No such user in this group'
                     }]
                 })
+        return jsonify({
+            'status': 404,
+            'error': StaticStrings.error_missing
+        })
+
+    def send_group_email(self, group_id):
+        current_Uid = self.get_id_from_header_token()
+        db_obj.my_cursor.execute(StaticStrings.single_id_selector.format('*','groups','group_id',group_id))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)>0:
+            if current_Uid in data[0]['members']:
+                result = self.send_email('group_emails')
+                return result
+            return jsonify({
+                    'status': 400,
+                    'data': [{
+                        'message': 'You are not a member of this group'
+                    }]
+                })
+        return jsonify({
+            'status': 404,
+            'error': StaticStrings.error_missing
+        })
+
+    def forgot_password(self):
+        user = request.get_json()
+        if not request.json or 'email_address' not in user or 'new_password' not in user:
+            return jsonify({
+                'status': 400,
+                'error': StaticStrings.error_bad_data
+            })
+        
+        email_address = user.get("email_address")
+        new_password = user.get('new_password')
+        db_obj.my_cursor.execute(StaticStrings.single_selector.format('users','email_address',email_address))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)>0:
+            user_id = data[0]['user_id']
+            db_obj.my_cursor.execute(StaticStrings.updater.format('users','password',new_password,'user_id',user_id))
+            data = db_obj.my_cursor.fetchall()
+            return jsonify({
+                'status': 200,
+                'data': [{
+                    'message': 'User password Succesfully updated',
+                    'new_details': data[0]
+                }]
+            })
         return jsonify({
             'status': 404,
             'error': StaticStrings.error_missing
