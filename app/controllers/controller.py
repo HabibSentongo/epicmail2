@@ -200,3 +200,20 @@ class EndpointFunctions:
             'status': 201,
             'data': new_group
         })
+
+    def delete_group(self, key):
+        current_Uid = self.get_id_from_header_token()
+        db_obj.my_cursor.execute(StaticStrings.two_id_selector.format('groups','group_id',key,'admin',current_Uid,'admin',current_Uid))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)>0:
+            db_obj.my_cursor.execute(StaticStrings.deleter.format('groups' , 'group_id', key))
+            return jsonify({
+                'status': 200,
+                'data': [{
+                    'message': StaticStrings.msg_deleted
+                }]
+            })
+        return jsonify({
+            'status': 404,
+            'error': StaticStrings.error_missing
+        })
