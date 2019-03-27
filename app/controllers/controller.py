@@ -217,3 +217,39 @@ class EndpointFunctions:
             'status': 404,
             'error': StaticStrings.error_missing
         })
+
+    def add_member(self, key):
+        current_Uid = self.get_id_from_header_token()
+        user = request.get_json()
+        if not request.json or 'user_id' not in user:
+            return jsonify({
+                'status': 400,
+                'error': StaticStrings.error_bad_data
+            })
+        
+        user_id = user.get("user_id")
+        db_obj.my_cursor.execute(StaticStrings.two_id_selector.format('groups','group_id',key,'admin',current_Uid,'admin',current_Uid))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)>0:
+            if user_id not in data[0]['members']:
+                members = data[0]['members']
+                members.append(user_id)
+                db_obj.my_cursor.execute(StaticStrings.add_member.format(members , key))
+                data = db_obj.my_cursor.fetchall()
+                return jsonify({
+                    'status': 200,
+                    'data': [{
+                        'message': 'User Succesfully added',
+                        'group_details': data[0]
+                    }]
+                })
+            return jsonify({
+                    'status': 400,
+                    'data': [{
+                        'message': 'User already in this group'
+                    }]
+                })
+        return jsonify({
+            'status': 404,
+            'error': StaticStrings.error_missing
+        })
