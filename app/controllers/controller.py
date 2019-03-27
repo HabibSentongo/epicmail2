@@ -282,6 +282,50 @@ class EndpointFunctions:
             'error': StaticStrings.error_missing
         })
 
+    def rename_group(self, group_id):
+        current_Uid = self.get_id_from_header_token()
+        info = request.get_json()
+        if not request.json or 'new_name' not in info:
+            return jsonify({
+                'status': 400,
+                'error': StaticStrings.error_bad_data
+            })
+        new_name = info.get("new_name")
+        db_obj.my_cursor.execute(StaticStrings.two_id_selector.format('groups','group_id',group_id,'admin',current_Uid,'admin',current_Uid))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)>0:
+            db_obj.my_cursor.execute(StaticStrings.updater.format('groups','group_name',new_name,'group_id',group_id))
+            data = db_obj.my_cursor.fetchall()
+            return jsonify({
+                'status': 200,
+                'data': [{
+                    'message': 'Group successfuly renamed',
+                    'group_details': data[0]
+                }]
+            })
+        return jsonify({
+            'status': 404,
+            'error': StaticStrings.error_missing
+        })
+
+    def all_groups(self):
+        currentID = self.get_id_from_header_token()
+        db_obj.my_cursor.execute(StaticStrings.select_all.format('groups'))
+        all_groups = db_obj.my_cursor.fetchall()
+        selected = []
+        for group in all_groups:
+            if currentID in group['members']:
+                selected.append(group)
+        if len(selected)>0:
+            return jsonify({
+                'status': 200,
+                'data': selected
+            })
+        return jsonify({
+                'status': 404,
+                'error': 'You are no in any group!'
+            })
+
     def send_group_email(self, group_id):
         current_Uid = self.get_id_from_header_token()
         db_obj.my_cursor.execute(StaticStrings.single_id_selector.format('*','groups','group_id',group_id))

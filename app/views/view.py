@@ -86,6 +86,18 @@ def add_member(group_id):
 def delete_member(group_id, user_id):
     return endpoint_function.delete_member(group_id, user_id)
 
+@app.route('/api/v2/groups/<int:group_id>/name', methods=['PATCH'])
+@jwt_required
+@swag_from('../apidocs/send_email.yml', methods=['PATCH'])
+def rename_group(group_id):
+    return endpoint_function.rename_group(group_id)
+
+@app.route('/api/v2/groups', methods=['GET'])
+@jwt_required
+@swag_from('../apidocs/send_email.yml', methods=['GET'])
+def all_groups():
+    return endpoint_function.all_groups()
+
 @app.route('/api/v2/groups/<int:group_id>/messages', methods=['POST'])
 @jwt_required
 @swag_from('../apidocs/send_email.yml', methods=['POST'])
