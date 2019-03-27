@@ -46,16 +46,22 @@ class DBmigrate:
         admin INT NOT NULL,\
         members INT[]);"
 
-        # member_table = "CREATE TABLE IF NOT EXISTS members(\
-        # group_id serial PRIMARY KEY,\
-        # group_name VARCHAR(20) NOT NULL,\
-        # admin INT NOT NULL,\
-        # members INT[]);"
+        group_email_table = "CREATE TABLE IF NOT EXISTS group_emails(\
+        mail_id serial PRIMARY KEY NOT NULL,\
+        created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\
+        subject VARCHAR (20),\
+        parent_message_id INT,\
+        sender_status VARCHAR (10), \
+        reciever_status VARCHAR (10), \
+        sender_id INT NOT NULL, \
+        reciever_id INT, \
+        message_details VARCHAR (60));"
 
         self.db_connect
         self.my_cursor.execute(user_table)
         self.my_cursor.execute(email_table)
         self.my_cursor.execute(group_table)
+        self.my_cursor.execute(group_email_table)
 
     def drop_table(self,table_name):
         dropper = "DROP TABLE IF EXISTS {}".format(table_name)

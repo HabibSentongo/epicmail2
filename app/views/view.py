@@ -50,7 +50,7 @@ def delete_mail(mail_id):
 @jwt_required
 @swag_from('../apidocs/send_email.yml', methods=['POST'])
 def send_mail():
-    return endpoint_function.send_email()
+    return endpoint_function.send_email('emails')
 
 @app.route('/api/v2/auth/signup', methods=['POST'])
 @swag_from('../apidocs/signup.yml', methods=['POST'])
@@ -85,3 +85,14 @@ def add_member(group_id):
 @swag_from('../apidocs/send_email.yml', methods=['DELETE'])
 def delete_member(group_id, user_id):
     return endpoint_function.delete_member(group_id, user_id)
+
+@app.route('/api/v2/groups/<int:group_id>/messages', methods=['POST'])
+@jwt_required
+@swag_from('../apidocs/send_email.yml', methods=['POST'])
+def send_group_mail(group_id):
+    return endpoint_function.send_group_email(group_id)
+
+@app.route('/api/v2/auth/reset', methods=['POST'])
+@swag_from('../apidocs/send_email.yml', methods=['POST'])
+def reset_password():
+    return endpoint_function.forgot_password()
