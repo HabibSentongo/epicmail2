@@ -18,3 +18,5 @@ class StaticStrings:
     VALUES ('{}','{}','{}','{}') RETURNING user_id;"
     updater = "UPDATE {} SET {} = '{}' WHERE {} = {};"
     deleter = "DELETE FROM {} WHERE {} = {};"
+    create_group = "INSERT INTO groups(group_name, admin, members)\
+    VALUES ('{}',{},array{}) RETURNING *"
