@@ -20,4 +20,4 @@ class StaticStrings:
     deleter = "DELETE FROM {} WHERE {} = {};"
     create_group = "INSERT INTO groups(group_name, admin, members)\
     VALUES ('{}',{},array{}) RETURNING *"
-    add_member = "UPDATE groups SET members = array{} WHERE group_id = {} RETURNING *"
+    update_members = "UPDATE groups SET members = array{} WHERE group_id = {} RETURNING *"
