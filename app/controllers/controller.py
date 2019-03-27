@@ -267,7 +267,7 @@ class EndpointFunctions:
                 return jsonify({
                     'status': 200,
                     'data': [{
-                        'message': 'User Succesfully added',
+                        'message': 'User Succesfully removed',
                         'group_details': data[0]
                     }]
                 })
