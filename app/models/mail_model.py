@@ -12,6 +12,7 @@ class StaticStrings:
     single_selector = "SELECT * FROM {} WHERE {} = '{}';"
     selector = "SELECT * FROM {} WHERE {} = {} AND {} = '{}';"
     two_string_selector = "SELECT * FROM {} WHERE {} = '{}' AND {} = '{}';"
+    select_all = "SELECT * FROM {}"
     create_email = "INSERT INTO {}(subject, parent_message_id, sender_status, sender_id, reciever_id, reciever_status, message_details)\
     VALUES ('{}',{},'{}',{},{},'{}','{}') RETURNING *;"
     create_user = "INSERT INTO users(email_address, first_name, last_name, password)\
