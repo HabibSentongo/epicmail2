@@ -20,6 +20,7 @@ class DBmigrate:
         self.port = '5432'
 
         if os.getenv('DB_NAME') == 'dcf13o9ukbb5mm':
+            self.host = 'ec2-54-225-242-183.compute-1.amazonaws.com'
             self.db_name = 'dcf13o9ukbb5mm'
             self.user_name = 'koggnwilbyhglb'
             self.user_password = '58039f5f02d2a556522fccc99a424849bb01d98a470bbfd3162661d9a631dc8d'
