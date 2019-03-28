@@ -1,0 +1,73 @@
+This Endpoint is for renaming a group
+---
+tags:
+  - RENAME GROUP
+
+parameters:
+  - name: body
+    description: This is the new group name provided to be used.
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "new_name"
+      properties:
+        parent_message_id:
+          type: "int"
+          example: "ironman"
+  - in: header
+    name: Authorization
+    description: authorization header
+    required: true
+    type: string
+    schema:
+    id: bearer
+
+security:
+  - JWT:
+      description: Provide JWT token
+      type: apikey
+      schema: bearer
+      name: Authorization
+      in: header
+      template: "Bearer {apikey}"
+      bearerFormat: JWT
+
+responses:
+  201:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        data:
+          type: string
+          enum:
+            - [{
+                  'message': 'Group successfuly renamed',
+                  'group_details': {
+                                      "group_id": 2,
+                                      "group_name": 'ironman',
+                                      "admin": 1,
+                                      "members": [1,7,4]
+                                    }
+              }]
+  400:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - 'Provide correct details'
+
+  404:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - "No such record"
