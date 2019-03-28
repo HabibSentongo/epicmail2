@@ -1,31 +1,21 @@
-This Endpoint is for sending an email
+This Endpoint is for adding a user into a group
 ---
 tags:
-  - SEND EMAIL
+  - ADD USER TO GROUP
 
 parameters:
   - name: body
-    description: This is the new email information provided for sending
+    description: This is the user information provided for adding into the group
     in: body
     required: true
     schema:
       type: object
       required:
-        - "subject"
-        - "sender_status"
+        - "user_id"
       properties:
-        parent_message_id:
+        user_id:
           type: "int"
           example: 4
-        sender_status:
-          type: "string"
-          example: "sent"
-        reciever_id:
-          type: "int"
-          example: 2
-        message_details:
-          type: "string"
-          example: "sentongo is cool wen u cool"
   - in: header
     name: Authorization
     description: authorization header

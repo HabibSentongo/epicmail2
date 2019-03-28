@@ -1,7 +1,7 @@
-This Endpoint is for sending an email
+This Endpoint is for sending an email to a group
 ---
 tags:
-  - SEND EMAIL
+  - SEND GROUP EMAIL
 
 parameters:
   - name: body
@@ -71,7 +71,19 @@ responses:
     schema:
       type: object
       properties:
+        data:
+          type: string
+          enum:
+            - [{
+                  'message': 'You are not a member of this group'
+              }]
+
+  404:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
         error:
           type: string
           enum:
-            - 'Provide correct details'
+            - 'No such record'

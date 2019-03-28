@@ -1,0 +1,65 @@
+This Endpoint is for deleting a user from a group
+---
+tags:
+  - DELETE GROUP MEMBER
+
+parameters:
+  - in: header
+    name: Authorization
+    description: authorization header
+    required: true
+    type: string
+    schema:
+    id: bearer
+
+security:
+  - JWT:
+      description: Provide JWT token
+      type: apikey
+      schema: bearer
+      name: Authorization
+      in: header
+      template: "Bearer {apikey}"
+      bearerFormat: JWT
+
+responses:
+  200:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        data:
+          type: string
+          enum:
+            - [{
+                  'message': 'User Succesfully removed',
+                  'group_details': {
+                                      "group_id": 2,
+                                      "group_name": 'ironman',
+                                      "admin": 1,
+                                      "members": [1,7,4]
+                                    }
+              }]
+  400:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        data:
+          type: string
+          enum:
+            - [
+                {
+                    "message": "No such user in this group"
+                }
+              ]
+
+  404:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - 'No such record'

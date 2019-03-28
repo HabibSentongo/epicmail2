@@ -5,7 +5,7 @@ tags:
 
 parameters:
   - name: body
-    description: This is the new email information provided for sending
+    description: This is the new user information provided for signup
     in: body
     required: true
     schema:

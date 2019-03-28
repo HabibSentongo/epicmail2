@@ -1,0 +1,50 @@
+This Endpoint is for getting all user groups
+---
+tags:
+  - GET ALL MY GROUPS
+
+parameters:
+  - in: header
+    name: Authorization
+    description: authorization header
+    required: true
+    type: string
+    schema:
+    id: bearer
+
+security:
+  - JWT:
+      description: Provide JWT token
+      type: apikey
+      schema: bearer
+      name: Authorization
+      in: header
+      template: "Bearer {apikey}"
+      bearerFormat: JWT
+
+responses:
+  200:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        data:
+          type: string
+          enum:
+            - [
+                  {
+                      "group_id": 2,
+                      "group_name": 'thor',
+                      "admin": 1,
+                      "members": [1,7,4]
+                  }
+              ]
+  404:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - "You are no in any group!"
