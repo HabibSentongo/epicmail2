@@ -16,6 +16,7 @@ class TestApi(unittest.TestCase):
         test_db.drop_table('emails')
         test_db.drop_table('users')
         test_db.drop_table('groups')
+        test_db.drop_table('group_emails')
 
         test_db.create_tables()
 
