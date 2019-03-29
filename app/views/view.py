@@ -67,3 +67,9 @@ def user_signin():
 @swag_from('../apidocs/send_email.yml', methods=['POST'])
 def create_group():
     return endpoint_function.create_group()
+
+@app.route('/api/v2/groups/<int:group_id>', methods=['DELETE'])
+@jwt_required
+@swag_from('../apidocs/delete_email.yml', methods=['DELETE'])
+def delete_group(group_id):
+    return endpoint_function.delete_group(group_id)
