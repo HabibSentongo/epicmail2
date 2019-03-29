@@ -18,7 +18,15 @@ class EndpointFunctions:
                                 '05 : GET /api/v2/messages/unread',
                                 '06 : GET /api/v2/messages/sent',
                                 '07 : GET /api/v2/messages/<message-id>',
-                                '08 : DELETE /api/v2/messages/<message-id>']
+                                '08 : DELETE /api/v2/messages/<message-id>',
+                                '09 : POST /api/v2/groups',
+                                '10 : DELETE /api/v2/groups/<int:group_id>',
+                                '11 : POST /api/v2/groups/<int:group_id>/users',
+                                '12 : DELETE /api/v2/groups/<int:group_id>/users/<int:user_id>',
+                                '13 : PATCH /api/v2/groups/<int:group_id>/name',
+                                '14 : GET /api/v2/groups',
+                                '15 : POST /api/v2/groups/<int:group_id>/messages',
+                                '16 : POST /api/v2/auth/reset']
                                     })
 
     def get_id_from_header_token(self):
@@ -101,7 +109,8 @@ class EndpointFunctions:
                 'status': 400,
                 'error': StaticStrings.error_savemode
             })
-        if 'reciever_id' not in mail_details or mail_details['reciever_id']==current_Uid:
+
+        if 'reciever_id' not in mail_details:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_missdestination
@@ -113,7 +122,7 @@ class EndpointFunctions:
         reciever_status = ''
         if sender_status == 'sent':
             reciever_status = 'unread'
-        sender_id = self.get_id_from_header_token()
+        sender_id = current_Uid
         reciever_id = mail_details.get("reciever_id")
         message_details = mail_details.get("message_details")
 
@@ -214,8 +223,8 @@ class EndpointFunctions:
                 }]
             })
         return jsonify({
-            'status': 404,
-            'error': StaticStrings.error_missing
+            'status': 401,
+            'error': StaticStrings.not_allowed
         })
 
     def add_member(self, key):
@@ -250,8 +259,8 @@ class EndpointFunctions:
                     }]
                 })
         return jsonify({
-            'status': 404,
-            'error': StaticStrings.error_missing
+            'status': 401,
+            'error': StaticStrings.not_allowed
         })
 
     def delete_member(self, key, member):
@@ -271,6 +280,13 @@ class EndpointFunctions:
                         'group_details': data[0]
                     }]
                 })
+            if member == current_Uid:
+                return jsonify({
+                    'status': 400,
+                    'data': [{
+                        'message': 'Admin cannot be deleted from group'
+                    }]
+                })
             return jsonify({
                     'status': 400,
                     'data': [{
@@ -278,8 +294,8 @@ class EndpointFunctions:
                     }]
                 })
         return jsonify({
-            'status': 404,
-            'error': StaticStrings.error_missing
+            'status': 401,
+            'error': StaticStrings.not_allowed
         })
 
     def rename_group(self, group_id):
@@ -304,8 +320,8 @@ class EndpointFunctions:
                 }]
             })
         return jsonify({
-            'status': 404,
-            'error': StaticStrings.error_missing
+            'status': 401,
+            'error': StaticStrings.not_allowed
         })
 
     def all_groups(self):
@@ -323,7 +339,7 @@ class EndpointFunctions:
             })
         return jsonify({
                 'status': 404,
-                'error': 'You are no in any group!'
+                'error': 'You are not in any group!'
             })
 
     def send_group_email(self, group_id):

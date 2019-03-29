@@ -1,0 +1,62 @@
+This Endpoint is for creating a group
+---
+tags:
+  - CREATE GROUP
+
+parameters:
+  - name: body
+    description: This is the new group name
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "group_name"
+      properties:
+        parent_message_id:
+          type: "int"
+          example: 'thor'
+  - in: header
+    name: Authorization
+    description: authorization header
+    required: true
+    type: string
+    schema:
+    id: bearer
+
+security:
+  - JWT:
+      description: Provide JWT token
+      type: apikey
+      schema: bearer
+      name: Authorization
+      in: header
+      template: "Bearer {apikey}"
+      bearerFormat: JWT
+
+responses:
+  201:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        data:
+          type: string
+          enum:
+            - [{
+                "admin": 3,
+                "group_id": 3,
+                "group_name": "hulk",
+                "members": [
+                    3
+                  ]
+              }]
+  400:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - 'Provide correct details'

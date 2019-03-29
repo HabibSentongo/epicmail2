@@ -1,0 +1,45 @@
+This Endpoint is for deleting a specific email
+---
+tags:
+  - DELETE EMAIL
+
+parameters:
+  - in: header
+    name: Authorization
+    description: authorization header
+    required: true
+    type: string
+    schema:
+    id: bearer
+
+security:
+  - JWT:
+      description: Provide JWT token
+      type: apikey
+      schema: bearer
+      name: Authorization
+      in: header
+      template: "Bearer {apikey}"
+      bearerFormat: JWT
+
+responses:
+  200:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        data:
+          type: string
+          enum:
+            - [{
+                  'message': 'Record has been deleted'
+              }]
+  401:
+    description: Accessing the url
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - "Unauthorised Process"

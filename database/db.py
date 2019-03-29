@@ -7,15 +7,23 @@ from psycopg2.extras import RealDictCursor
 class DBmigrate:
     def __init__(self):
 
+        self.port = '5432'
+        self.host = 'ec2-54-225-242-183.compute-1.amazonaws.com'
+        self.db_name = 'dcf13o9ukbb5mm'
+        self.user_name = 'koggnwilbyhglb'
+        self.user_password = '58039f5f02d2a556522fccc99a424849bb01d98a470bbfd3162661d9a631dc8d'
+        
         if os.getenv('DB_NAME') == 'test_epicmail_db':
             self.db_name = 'test_epicmail_db'
-        else:
+            self.user_password = ''
+            self.host = '127.0.0.1'
+            self.user_name = 'postgres'
+        elif os.getenv('DB_NAME') == 'epicmail_db':
             self.db_name = 'epicmail_db'
-        print(self.db_name)
-        self.user_name = 'postgres'
-        self.user_password = ''
-        self.host = '127.0.0.1'
-        self.port = '5432'
+            self.user_password = 'root'
+            self.host = '127.0.0.1'
+            self.user_name = 'postgres'
+        
         self.db_connect = psycopg2.connect(
             database=self.db_name, user=self.user_name, password=self.user_password, host=self.host, port=self.port)
         self.db_connect.autocommit = True
