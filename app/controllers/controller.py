@@ -234,7 +234,7 @@ class EndpointFunctions:
             if user_id not in data[0]['members']:
                 members = data[0]['members']
                 members.append(user_id)
-                db_obj.my_cursor.execute(StaticStrings.add_member.format(members , key))
+                db_obj.my_cursor.execute(StaticStrings.update_members.format(members , key))
                 data = db_obj.my_cursor.fetchall()
                 return jsonify({
                     'status': 200,
@@ -247,6 +247,34 @@ class EndpointFunctions:
                     'status': 400,
                     'data': [{
                         'message': 'User already in this group'
+                    }]
+                })
+        return jsonify({
+            'status': 404,
+            'error': StaticStrings.error_missing
+        })
+
+    def delete_member(self, key, member):
+        current_Uid = self.get_id_from_header_token()
+        db_obj.my_cursor.execute(StaticStrings.two_id_selector.format('groups','group_id',key,'admin',current_Uid,'admin',current_Uid))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)>0:
+            if member in data[0]['members'] and member != current_Uid:
+                members = data[0]['members']
+                members.remove(member)
+                db_obj.my_cursor.execute(StaticStrings.update_members.format(members, key))
+                data = db_obj.my_cursor.fetchall()
+                return jsonify({
+                    'status': 200,
+                    'data': [{
+                        'message': 'User Succesfully added',
+                        'group_details': data[0]
+                    }]
+                })
+            return jsonify({
+                    'status': 400,
+                    'data': [{
+                        'message': 'No such user in this group'
                     }]
                 })
         return jsonify({
