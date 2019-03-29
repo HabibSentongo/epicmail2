@@ -180,3 +180,23 @@ class EndpointFunctions:
                     'status': 404,
                     'error': 'Bad email and/or password'
                 })
+
+    def create_group(self):
+        current_Uid = self.get_id_from_header_token()
+        group_details = request.get_json()
+        if not request.json or 'group_name' not in group_details:
+            return jsonify({
+                'status': 400,
+                'error': StaticStrings.error_bad_data
+            })
+        
+        group_name = group_details.get("group_name")
+        admin = current_Uid
+        members = [current_Uid]
+        
+        db_obj.my_cursor.execute(StaticStrings.create_group.format(group_name, admin, members))
+        new_group = db_obj.my_cursor.fetchall()
+        return jsonify({
+            'status': 201,
+            'data': new_group
+        })

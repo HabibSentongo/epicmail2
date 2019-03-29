@@ -43,21 +43,27 @@ def specific(mail_id):
 @app.route('/api/v2/messages/<int:mail_id>', methods=['DELETE'])
 @jwt_required
 @swag_from('../apidocs/delete_email.yml', methods=['DELETE'])
-def deletemail(mail_id):
+def delete_mail(mail_id):
     return endpoint_function.delete_email(mail_id)
 
 @app.route('/api/v2/messages', methods=['POST'])
 @jwt_required
 @swag_from('../apidocs/send_email.yml', methods=['POST'])
-def sendmail():
+def send_mail():
     return endpoint_function.send_email()
 
 @app.route('/api/v2/auth/signup', methods=['POST'])
 @swag_from('../apidocs/signup.yml', methods=['POST'])
-def userSignup():
+def user_signup():
     return endpoint_function.create_account()
 
 @app.route('/api/v2/auth/signin', methods=['POST'])
 @swag_from('../apidocs/signin.yml', methods=['POST'])
-def userSignin():
+def user_signin():
     return endpoint_function.signin()
+
+@app.route('/api/v2/groups', methods=['POST'])
+@jwt_required
+@swag_from('../apidocs/send_email.yml', methods=['POST'])
+def create_group():
+    return endpoint_function.create_group()
