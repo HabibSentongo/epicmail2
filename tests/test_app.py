@@ -46,6 +46,13 @@ class TestApi(unittest.TestCase):
             }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token))
             return token
 
+    def group_helper(self):
+        token = self.helper_fn('signup', '')
+        self.client.post('/api/v2/groups', data = json.dumps({
+            "group_name": "thor"
+        }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token))
+        return token
+
     def test_home_status(self):
         response = self.client.get('/', content_type = 'application/json')
         self.assertEqual(response.status_code, 200)
@@ -106,14 +113,9 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['error'], 'Bad email and/or password')
 
     def test_signin_good_request(self):
-        self.client.post('/api/v2/auth/signup', data = json.dumps({
-            "email_address": "habib@sentongo.andela",
-            "first_name": "Habib",
-            "last_name": "Sentongo",
-            "password": "andela"
-        }),content_type = 'application/json')
+        self.helper_fn('signup', '')
         response = json.loads(self.client.post('/api/v2/auth/signin', data = json.dumps({
-            "email_address": "habib@sentongo.andela",
+            "email_address": "habib@andela",
             "password": "andela"
         }),content_type = 'application/json').data.decode())
         self.assertEqual(response['status'],200)
@@ -199,3 +201,69 @@ class TestApi(unittest.TestCase):
         response = json.loads(self.client.get('/api/v2/messages/sent', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
         self.assertEqual(response['status'],200)
         self.assertEqual(len(response['data']), 1)
+
+    def test_create_group_good_request(self):
+        token = self.helper_fn('signup', '')
+        response = json.loads(self.client.post('/api/v2/groups', data = json.dumps({
+            "group_name": "thor"
+        }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],201)
+        self.assertEqual(len(response['data']), 1)
+
+    def test_delete_group_good_request(self):
+        token = self.group_helper()
+        response = json.loads(self.client.delete('/api/v2/groups/1', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],200)
+        self.assertEqual(len(response['data']), 1)
+
+    def test_add_member_good_request(self):
+        token = self.group_helper()
+        response = json.loads(self.client.post('/api/v2/groups/1/users', data = json.dumps({
+            "user_id": 2
+        }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],200)
+        self.assertEqual(len(response['data'][0]['group_details']['members']), 2)
+
+    def test_delete_member_good_request(self):
+        token = self.group_helper()
+        self.client.post('/api/v2/groups/1/users', data = json.dumps({
+            "user_id": 2
+        }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token))
+        response = json.loads(self.client.delete('/api/v2/groups/1/users/2', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],200)
+        self.assertEqual(len(response['data'][0]['group_details']['members']), 1)
+
+    def test_rename_group_good_request(self):
+        token = self.group_helper()
+        response = json.loads(self.client.patch('/api/v2/groups/1/name', data = json.dumps({
+            "new_name": 'thanos'
+        }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],200)
+        self.assertEqual(response['data'][0]['group_details']['group_name'], 'thanos')
+
+    def test_get_all_groups_good_request(self):
+        token = self.group_helper()
+        response = json.loads(self.client.get('/api/v2/groups', data = json.dumps({}),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],200)
+        self.assertEqual(len(response['data']), 1)
+
+    def test_send_group_email_good_request(self):
+        token = self.group_helper()
+        response = json.loads(self.client.post('/api/v2/groups/1/messages', data = json.dumps({
+            "subject": "how cool",
+            "parent_message_id": 4,
+            "sender_status": "sent",
+            "reciever_id": 2,
+            "message_details": "sentongo is cool wen u cool"
+        }),content_type = 'application/json', headers = dict(Authorization = 'Bearer '+ token)).data.decode())
+        self.assertEqual(response['status'],201)
+        self.assertEqual(response['data'][0]['subject'], "how cool")
+
+    def test_password_reset_good_request(self):
+        self.helper_fn('signup', '')
+        response = json.loads(self.client.post('/api/v2/auth/reset', data = json.dumps({
+            "email_address": "habib@andela",
+            "new_password": "adela"
+        }),content_type = 'application/json').data.decode())
+        self.assertEqual(response['status'],200)
+        self.assertEqual(response['data'][0]['new_details']['password'], 'adela')
