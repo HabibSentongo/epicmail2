@@ -58,15 +58,23 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         returndata = json.loads(response.data.decode())
         expected = ['Welcome to Sentongo\'s EpicMail!',
-                    'Endpoints',
-                    '01 : POST /api/v2/auth/signup',
-                    '02 : POST /api/v2/auth/login',
-                    '03 : POST /api/v2/messages',
-                    '04 : GET /api/v2/messages',
-                    '05 : GET /api/v2/messages/unread',
-                    '06 : GET /api/v2/messages/sent',
-                    '07 : GET /api/v2/messages/<message-id>',
-                    '08 : DELETE /api/v2/messages/<message-id>']
+                                'Endpoints',
+                                '01 : POST /api/v2/auth/signup',
+                                '02 : POST /api/v2/auth/login',
+                                '03 : POST /api/v2/messages',
+                                '04 : GET /api/v2/messages',
+                                '05 : GET /api/v2/messages/unread',
+                                '06 : GET /api/v2/messages/sent',
+                                '07 : GET /api/v2/messages/<message-id>',
+                                '08 : DELETE /api/v2/messages/<message-id>',
+                                '09 : POST /api/v2/groups',
+                                '10 : DELETE /api/v2/groups/<int:group_id>',
+                                '11 : POST /api/v2/groups/<int:group_id>/users',
+                                '12 : DELETE /api/v2/groups/<int:group_id>/users/<int:user_id>',
+                                '13 : PATCH /api/v2/groups/<int:group_id>/name',
+                                '14 : GET /api/v2/groups',
+                                '15 : POST /api/v2/groups/<int:group_id>/messages',
+                                '16 : POST /api/v2/auth/reset']
         self.assertEqual(returndata['data'], expected)
 
     def test_signup_without_post_data(self):

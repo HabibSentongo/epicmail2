@@ -62,7 +62,7 @@ responses:
           enum:
             - 'Provide correct details'
 
-  404:
+  401:
     description: Accessing the url
     schema:
       type: object
@@ -70,4 +70,4 @@ responses:
         error:
           type: string
           enum:
-            - "No such record"
+            - "Unauthorised Process"
