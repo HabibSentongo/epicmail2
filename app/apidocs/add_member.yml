@@ -15,7 +15,7 @@ parameters:
       properties:
         user_id:
           type: "int"
-          example: 4
+          example: 2
   - in: header
     name: Authorization
     description: authorization header
@@ -35,7 +35,7 @@ security:
       bearerFormat: JWT
 
 responses:
-  201:
+  200:
     description: Accessing the url
     schema:
       type: object
@@ -43,19 +43,17 @@ responses:
         data:
           type: string
           enum:
-            - [
-                  {
-                      "created_on": "Sat, 23 Mar 2019 23:45:14 GMT",
-                      "mail_id": 1,
-                      "message_details": "sentongo is cool wen u cool",
-                      "parent_message_id": 4,
-                      "reciever_status": "unread",
-                      "reciever_id": 2,
-                      "sender_status": "sent",
-                      "sender_id": 1,
-                      "subject": "how cool"
-                  }
-              ]
+            - [{
+                  'message': 'User Succesfully added',
+                  'group_details': {
+                                      "admin": 3,
+                                      "group_id": 3,
+                                      "group_name": "hulk",
+                                      "members": [
+                                          3
+                                      ]
+                                  }
+              }]
   400:
     description: Accessing the url
     schema:
