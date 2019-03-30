@@ -1,7 +1,7 @@
-This Endpoint is for deleting a specific email
+This Endpoint is for deleting a specific group
 ---
 tags:
-  - DELETE EMAIL
+  - DELETE GROUP
 
 parameters:
   - in: header
