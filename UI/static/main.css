@@ -1,0 +1,242 @@
+body{
+    font-family: sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 0.5px;
+    margin: 0px;
+    background-color: #eff5fb;
+}
+ul{
+    margin: 0;
+    padding: 0;
+}
+#heading{
+    text-align: center;
+}
+.container{
+    width: 70%;
+    margin: auto;
+    overflow: hidden;
+    float: center;
+}
+.container a{
+    font-weight: bold
+}
+.button1{
+    height: 38px;
+    background: #f383ef;
+    border: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    font-weight: bold;
+    font-size: 150%;
+    width: 30%;
+
+}
+.button1 a{
+    display: inline;
+}
+
+header{
+    background: #f383ef;
+    color: white;
+}
+
+header a{
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+header .current-page a{
+    color: blueviolet;
+    font-weight: bold;
+}
+#more{
+    display: none;
+}
+
+
+header li{
+    float: left;
+    display: inline;
+    padding: 0 20px 0 10px;
+
+}
+
+header .logo{
+    margin-top: 10px;
+    float: left;  
+}
+header nav{
+    float: right;
+    margin-top: 50px;
+    
+}
+
+header  .current-page a:hover{
+    color: black;
+    font-weight: bold;
+
+}
+
+#page{
+    overflow-y: auto;
+}
+
+#login .row{
+    width: 40%;
+    text-align: center;
+    float: left;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 5px;
+}
+
+#login input{
+    height: 30px;
+    width: 200px; 
+    padding: 10px;
+    margin:0px 25px 5px 5px;
+}
+
+.inputs{
+    float: right;
+    width: 40%;
+    padding-top: 0%;
+}
+
+input, textarea{
+    width: 80%;
+    border-radius: 6px;
+    padding: 1%;
+}
+
+input:focus, textarea:focus, select:focus{
+    outline: none;
+}
+
+.mailinputs{
+    width: 70%;
+    align-content: center;
+    padding-left: 20%;
+}
+
+.info{
+    float: left;
+    width: 40%;
+    padding-top: 3%;
+}
+
+input{
+    margin: 5px;
+    height: 20px;
+}
+
+#sidenav{
+    border-radius: 5%;
+    float: left;
+    width: 10%;
+    background: rgb(206, 224, 228);
+    padding-left: 5%;
+    height: 100%;
+    bottom: 0%;
+}
+
+#sidenav ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    
+}
+
+#sidenav a{
+    color: blue;
+    text-decoration: none;
+    top: 10%;
+    bottom: 10%;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#sidenav ul :hover{
+    color: aquamarine;
+}
+
+#mailist{
+    float: right;
+    width: 80%;
+    padding-right: 3%;
+}
+footer{
+    position: fixed;
+    bottom: 0%;
+    width: 100%;
+    background: rgb(206, 224, 228);
+   text-align: center;
+    height: 15%; 
+}
+.email{
+    background: #afbebe;
+    border-radius: 10px;
+    padding: 4px;
+    margin: 4px;
+    
+}
+
+#options{
+    display: inline;
+}
+.email:hover{
+    background-color:rgb(206, 224, 228);
+}
+
+#msg{
+    display: none;
+}
+
+form button{
+    width: 30%;
+    border-radius: 10px;
+}
+
+.inBtn{
+    width: 7%;
+    height: 5%;
+    border-radius: 50px;
+    margin-left: 1%;
+}
+
+.topic{
+    font-weight: bold;
+}
+
+@media screen and (max-width: 959px){
+    
+    header .logo, header nav,
+    header nav li{
+        float: none;
+        text-align: center;
+        width: 100%;
+    }
+    header{
+        padding-bottom: 10px;  
+    }
+    .footer-info{
+        display: inline;
+        margin: 0px;
+    }
+
+    @media screen and (max-width: 640px){
+
+    }
+    @media screen and (max-width: 320px){
+        #footext{
+            display: none;
+        }
+    }
+
+}

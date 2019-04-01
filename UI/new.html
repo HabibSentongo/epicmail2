@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EpicMail || compose</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="static/main.css" />
+    <script src="static/main.js"></script>
+</head>
+<body>
+    <header>
+            <div class="container">
+                <div class="logo">
+                    
+                    <a href="new.html">
+                            <img src="static/img/epic.png" alt="EpicMail Logo" height="70" >
+                        </a>
+                        <h1>EpicMail</h1> 
+                </div>
+            </div>
+        </header>
+
+    <section id="page" >
+        <h3 id="heading">COMPOSE NEW MAIL</h3>
+        <nav id="sidenav">
+            <ul>
+                <li ><a href="inbox.html">Inbox</a></li>
+                <li ><a href="new.html">Compose</a></li>
+                <li ><a href="sent.html">Sent</a></li>
+                <li ><a href="drafts.html">Drafts</a></li>
+                <li ><a href="index.html">Sign Out</a></li>
+            </ul>
+        </nav>
+    <div id="mailist">
+        <div class="mailinputs" >
+            <form method="GET" action="sent.html">
+                <br><br>
+                <input type="text" placeholder="Enter Recipient Username or Group name" required><br>
+                <input type="text" placeholder="Mail Topic" required><br>
+                <textarea name="mailbody" id="mailbody" cols="45" rows="5" placeholder="mail body ...."></textarea><br>
+                <button type="submit" class="button1">Send</button>
+            </form>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-info">
+            <b><p id="footext">All Rights reserved. T&Cs apply. </p>
+            <p>EpicMail</p></b>
+        </div>
+    </footer>
+    
+</body>
+</html>

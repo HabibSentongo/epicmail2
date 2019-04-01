@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EpicMail || inbox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="static/main.css" />
+    <script src="static/main.js"></script>
+</head>
+<body>
+    <header>
+            <div class="container">
+                <div class="logo">
+                    
+                    <a href="inbox.html">
+                            <img src="static/img/epic.png" alt="EpicMail Logo" height="70" >
+                        </a>
+                        <h1>EpicMail</h1> 
+                </div>
+                
+            </div>
+        </header>
+
+    <section id="page" >
+        <h3 id="heading">INBOX</h3>
+        <nav id="sidenav">
+            <ul>
+                <li ><a href="inbox.html">Inbox</a></li>
+                <li ><a href="new.html">Compose</a></li>
+                <li ><a href="sent.html">Sent</a></li>
+                <li ><a href="drafts.html">Drafts</a></li>
+                <li ><a href="index.html">Sign Out</a></li>
+            </ul>
+        </nav>
+    <div id="mailist">
+        <div class="email" onclick="mailDetails()">
+            <p class="topic">Welcome to EpicMail <span id="dots">.....</span></p>
+            <p id="msg">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br><br></p>
+            <a href="new.html"><button class="inBtn">Reply</button></a><a href="new.html"><button class="inBtn">Foward</button></a>
+        </div>
+        <div class="email" onclick="mailDetails()">
+            <p class="topic">Synchronize your contacts <span id="dots">.....</span></p>
+            <p id="msg">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br><br></p>
+            <a href="new.html"><button class="inBtn">Reply</button></a><a href="new.html"><button class="inBtn">Foward</button></a>
+        </div>
+        <div class="email" onclick="mailDetails()">
+            <p class="topic">Quick Start Guide <span id="dots">.....</span></p>
+            <p id="msg">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br><br></p>
+            <a href="new.html"><button class="inBtn">Reply</button></a><a href="new.html"><button class="inBtn">Foward</button></a>
+        </div>
+    </div>
+    </section>
+    <footer>
+        <div class="footer-info">
+            <b><p id="footext">All Rights reserved. T&Cs apply. </p>
+            <p>EpicMail</p></b>
+        </div>
+    </footer>
+    
+</body>
+</html>
