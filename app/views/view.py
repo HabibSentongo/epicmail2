@@ -2,8 +2,10 @@ from flask import Flask, jsonify, request
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims)
 from flasgger import Swagger, swag_from
 from ..controllers.controller import EndpointFunctions
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 swagger = Swagger(app)
 
 app.config['JWT_SECRET_KEY'] = 'sentongo'
