@@ -1,7 +1,7 @@
-This Endpoint is for getting all recieved emails
+This Endpoint is for getting all user groups
 ---
 tags:
-  - INBOX
+  - GET ALL MY GROUPS
 
 parameters:
   - in: header
@@ -33,15 +33,10 @@ responses:
           enum:
             - [
                   {
-                      "created_on": "Sat, 23 Mar 2019 23:45:14 GMT",
-                      "mail_id": 1,
-                      "message_details": "sentongo is cool wen u cool",
-                      "parent_message_id": 4,
-                      "reciever_status": "unread",
-                      "reciever_id": 2,
-                      "sender_status": "sent",
-                      "sender_id": 1,
-                      "subject": "how cool"
+                      "group_id": 2,
+                      "group_name": 'thor',
+                      "admin": 1,
+                      "members": [1,7,4]
                   }
               ]
   404:
@@ -52,4 +47,4 @@ responses:
         error:
           type: string
           enum:
-            - 'No records yet!'
+            - "You are no in any group!"

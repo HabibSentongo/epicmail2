@@ -1,7 +1,7 @@
-This Endpoint is for getting all recieved emails
+This Endpoint is for deleting a specific group
 ---
 tags:
-  - INBOX
+  - DELETE GROUP
 
 parameters:
   - in: header
@@ -31,20 +31,10 @@ responses:
         data:
           type: string
           enum:
-            - [
-                  {
-                      "created_on": "Sat, 23 Mar 2019 23:45:14 GMT",
-                      "mail_id": 1,
-                      "message_details": "sentongo is cool wen u cool",
-                      "parent_message_id": 4,
-                      "reciever_status": "unread",
-                      "reciever_id": 2,
-                      "sender_status": "sent",
-                      "sender_id": 1,
-                      "subject": "how cool"
-                  }
-              ]
-  404:
+            - [{
+                  'message': 'Record has been deleted'
+              }]
+  401:
     description: Accessing the url
     schema:
       type: object
@@ -52,4 +42,4 @@ responses:
         error:
           type: string
           enum:
-            - 'No records yet!'
+            - "Unauthorised Process"
