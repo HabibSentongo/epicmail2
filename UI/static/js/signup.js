@@ -76,7 +76,7 @@ last_name.onkeyup = function names_validation() {
 }
 
 function signup_user() {
-    let url = "http://127.0.0.1:5000/api/v2/auth/signup";
+    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/auth/signup";
     let new_user = {
         first_name: first_name.value,
         last_name: last_name.value,
@@ -99,7 +99,7 @@ function signup_user() {
             }
             else if (data.status === 201) {
                 document.getElementById("page_response").style.display = "block";
-                document.getElementById("page_response").innerHTML = "Logged in Successfuly";
+                document.getElementById("page_response").innerHTML = "Signed up Successfuly";
                 window.location.replace("./inbox.html");
             }
 
