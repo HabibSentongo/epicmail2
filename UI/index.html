@@ -36,11 +36,11 @@
                     <p>EpicMail wishes to empower lives by helping people to conveniently and securely exchange messages/information over the internet. </p>
                 </div>  
                 <div class="inputs" >
-                    <form method="GET" action="inbox.html">
+                    <form action="#" method="GET" onsubmit="signin_user(); return false">
                         <br><br>
-                        <input type="text" placeholder="Enter Username" required><br>
-                        <input type="password" placeholder="Password" required><br>
-                        <button type="submit" class="button1">Login</button><br><br>
+                        <input type="text" placeholder="Enter Email" required id="email"><span id="email_error"></span><br>
+                        <input type="password" placeholder="Password" required id="password"><br>
+                        <button type="submit" class="button1">Login</button><span id="page_response"></span><br><br>
                         <a href="password_reset.html">Forgot Password?</a>
                         <p>Not on EpicMail yet? <a href="signup.html">Sign Up</a></p>
                     </form>
@@ -55,4 +55,5 @@
     </footer>
     
 </body>
+<script src="static/js/signin.js"></script>
 </html>
