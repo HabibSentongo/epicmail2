@@ -157,7 +157,7 @@ class EndpointFunctions:
 
         db_obj.my_cursor.execute(StaticStrings.single_selector.format('users', 'email_address', email_address))
         data = db_obj.my_cursor.fetchall()
-        if len(data)>0:
+        if not data:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_email_exist
