@@ -26,7 +26,7 @@ function send_mail() {
         subject: subject.value,
         parent_message_id: 0,
         sender_status: "sent",
-        reciever_id: 2,
+        reciever_id: email.value,
         message_details: subject.value
     };
 
