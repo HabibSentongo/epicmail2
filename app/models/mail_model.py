@@ -23,3 +23,4 @@ class StaticStrings:
     VALUES ('{}',{},array{}) RETURNING *"
     update_members = "UPDATE groups SET members = array{} WHERE group_id = {} RETURNING *"
     not_allowed = "Unauthorised Process"
+    id_selector = "SELECT user_id FROM users WHERE email_address = '{}';"

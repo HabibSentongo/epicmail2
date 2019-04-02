@@ -34,21 +34,21 @@
         </nav>
     <div id="mailist">
         <div class="mailinputs" >
-            <form method="GET" action="sent.html">
+            <form action="#" method="GET" onsubmit="send_mail(); return false">
                 <br><br>
-                <input type="text" placeholder="Enter Recipient Username or Group name" required><br>
-                <input type="text" placeholder="Mail Topic" required><br>
-                <textarea name="mailbody" id="mailbody" cols="45" rows="5" placeholder="mail body ...."></textarea><br>
-                <button type="submit" class="button1">Send</button>
+                <input type="text" placeholder="To ...." required id="to"><span id="email_error"></span><br>
+                <input type="text" placeholder="Subject ...." required id="subject"><br>
+                <textarea name="mailbody" id="mailbody" cols="45" rows="5" placeholder="Type here ...." id="body"></textarea><span id="page_response"></span><br>
+                <button type="submit" class="button1" id="send">Send</button>         <button type="submit" class="button1" id="draft">Save as Draft</button>          <button class="button1" type="reset">Discard</button>
             </form>
         </div>
     </section>
     <footer>
         <div class="footer-info">
             <b><p id="footext">All Rights reserved. T&Cs apply. </p>
-            <p>EpicMail</p></b>
         </div>
     </footer>
     
 </body>
+<script src="static/js/sendmail.js"></script>
 </html>

@@ -1,4 +1,9 @@
-let email = document.getElementById("email");
+let email = document.getElementById("to");
+let subject = document.getElementById("subject");
+let body = document.getElementById("body");
+let send = document.getElementById("send");
+let token = localStorage.getItem('token')
+console.log(token);
 
 function email_validation(){
     let email_error = document.getElementById("email_error");
@@ -15,33 +20,31 @@ function email_validation(){
 email.onkeyup = email_validation;
 email.onchange = email_validation;
 
-function signin_user() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/auth/signin";
-    let new_user = {
-        email_address: email.value,
-        password: password.value,
+function send_mail() {
+    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/messages";
+    let new_mail = {
+        subject: subject.value,
+        parent_message_id: 0,
+        sender_status: "sent",
+        reciever_id: 2,
+        message_details: subject.value
     };
 
     fetch(url, {
         method: "POST",
         headers: {
             "content-type": "application/json",
+            "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(new_user)
+        body: JSON.stringify(new_mail)
     })
         .then((response) => response.json())
         .then((data) => {
-            if (data.status === 404) {
+            if (data.status === 201) {
                 document.getElementById("page_response").style.display = "block";
-                document.getElementById("page_response").innerHTML = data.error;
-            }
-            else if (data.status === 200) {
-                document.getElementById("page_response").style.display = "block";
-                document.getElementById("page_response").innerHTML = "Logged in Successfuly";
-                token=data.data[0]['token'];
-                localStorage.setItem('token', token);
-                console.log(token);
+                document.getElementById("page_response").innerHTML = "Message Sent";
                 window.location.replace("./inbox.html");
             }
+
         })
 }
