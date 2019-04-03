@@ -53,5 +53,11 @@ function send_mail() {
                 document.getElementById("page_response").innerHTML = "Unregistered Recipient";
                 email.setCustomValidity("Unregistered Recipient.");
             }
+            else if (data.status === 401) {
+                document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
+                document.getElementById("page_response").innerHTML = "Session Expired";
+                window.location.replace("./index.html");
+            }
         })
 }

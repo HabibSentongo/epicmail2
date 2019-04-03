@@ -56,5 +56,11 @@ function send_group_mail() {
                 document.getElementById("page_response").style.color = "red";
                 document.getElementById("page_response").innerHTML = "You are not a member of this group";
             }
+            else if (data.status === 401) {
+                document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
+                document.getElementById("page_response").innerHTML = "Session Expired";
+                window.location.replace("./index.html");
+            }
         })
 }
