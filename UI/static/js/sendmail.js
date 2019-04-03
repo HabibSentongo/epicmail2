@@ -43,8 +43,12 @@ function send_mail() {
             if (data.status === 201) {
                 document.getElementById("page_response").style.display = "block";
                 document.getElementById("page_response").innerHTML = "Message Sent";
-                window.location.replace("./inbox.html");
+                window.location.replace("./sent.html");
             }
-
+            else if (data.status === 404) {
+                document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").innerHTML = "Unregistered Recipient";
+                email.setCustomValidity("Unregistered Recipient.");
+            }
         })
 }
