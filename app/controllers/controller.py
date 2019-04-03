@@ -157,7 +157,7 @@ class EndpointFunctions:
 
         db_obj.my_cursor.execute(StaticStrings.single_selector.format('users', 'email_address', email_address))
         data = db_obj.my_cursor.fetchall()
-        if not data:
+        if data:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_email_exist
@@ -196,7 +196,7 @@ class EndpointFunctions:
             })
         return jsonify({
                     'status': 404,
-                    'error': 'Bad email and/or password'
+                    'error': 'Wrong email and/or password'
                 })
 
     def create_group(self):

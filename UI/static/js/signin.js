@@ -8,6 +8,7 @@ function email_validation(){
     }
     else {
         email_error.style.display = "block";
+        email_error.style.color = "red";
         email_error.innerHTML = "Enter correct email";
         email.setCustomValidity("Wrong Email Format.")
     }
@@ -33,10 +34,12 @@ function signin_user() {
         .then((data) => {
             if (data.status === 404) {
                 document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
                 document.getElementById("page_response").innerHTML = data.error;
             }
             else if (data.status === 200) {
                 document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "green";
                 document.getElementById("page_response").innerHTML = "Logged in Successfuly";
                 token=data.data[0]['token'];
                 localStorage.setItem('token', token);

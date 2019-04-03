@@ -13,6 +13,7 @@ function email_validation(){
     }
     else {
         email_error.style.display = "block";
+        email_error.style.color = "red";
         email_error.innerHTML = "Enter correct email";
         email.setCustomValidity("Wrong Email Format.")
     }
@@ -42,11 +43,13 @@ function send_mail() {
         .then((data) => {
             if (data.status === 201) {
                 document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "green";
                 document.getElementById("page_response").innerHTML = "Message Sent";
                 window.location.replace("./sent.html");
             }
             else if (data.status === 404) {
                 document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
                 document.getElementById("page_response").innerHTML = "Unregistered Recipient";
                 email.setCustomValidity("Unregistered Recipient.");
             }
