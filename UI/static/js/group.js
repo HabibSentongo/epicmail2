@@ -9,6 +9,7 @@ name.onkeyup = function name_validation() {
         name.setCustomValidity("");
     } else {
         name_error.style.display = "block";
+        name_error.style.color = "red";
         name_error.innerHTML = "Name must be more than one letter and only alphabets";
         name.setCustomValidity("Invalid Name.");
     }
@@ -32,6 +33,7 @@ function create_group() {
         .then((data) => {
             if (data.status === 201) {
                 document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
                 document.getElementById("page_response").innerHTML = "Group Created";
                 window.location.replace("./inbox.html");
             }
