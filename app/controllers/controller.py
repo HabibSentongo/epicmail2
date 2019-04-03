@@ -351,13 +351,50 @@ class EndpointFunctions:
                 'error': 'You are not in any group!'
             })
 
+    def send_grp_email(self, recipient_table,group_id):
+        current_Uid = self.get_id_from_header_token()
+        mail_details = request.get_json()
+        if not request.json or 'subject' not in mail_details:
+            return jsonify({
+                'status': 400,
+                'error': StaticStrings.error_bad_data
+            })
+        if 'sender_status' not in mail_details:
+            return jsonify({
+                'status': 400,
+                'error': StaticStrings.error_savemode
+            })
+
+        if 'reciever_id' not in mail_details:
+            return jsonify({
+                'status': 400,
+                'error': StaticStrings.error_missdestination
+            })
+        
+        subject = mail_details.get("subject")
+        parent_message_id = mail_details.get("parent_message_id")
+        sender_status = mail_details.get("sender_status")
+        reciever_status = ''
+        if sender_status == 'sent':
+            reciever_status = 'unread'
+        sender_id = current_Uid
+        reciever_id = group_id
+        message_details = mail_details.get("message_details")
+
+        db_obj.my_cursor.execute(StaticStrings.create_email.format(recipient_table,subject, parent_message_id, sender_status, sender_id, reciever_id, reciever_status, message_details))
+        new_mail = db_obj.my_cursor.fetchall()
+        return jsonify({
+            'status': 201,
+            'data': new_mail
+        })
+
     def send_group_email(self, group_id):
         current_Uid = self.get_id_from_header_token()
         db_obj.my_cursor.execute(StaticStrings.single_id_selector.format('*','groups','group_id',group_id))
         data = db_obj.my_cursor.fetchall()
-        if len(data)>0:
+        if data:
             if current_Uid in data[0]['members']:
-                result = self.send_email('group_emails')
+                result = self.send_grp_email('group_emails',group_id)
                 return result
             return jsonify({
                     'status': 400,
