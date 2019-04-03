@@ -33,9 +33,15 @@ function create_group() {
         .then((data) => {
             if (data.status === 201) {
                 document.getElementById("page_response").style.display = "block";
-                document.getElementById("page_response").style.color = "red";
+                document.getElementById("page_response").style.color = "green";
                 document.getElementById("page_response").innerHTML = "Group Created";
                 window.location.replace("./inbox.html");
+            }
+            else if (data.status === 401) {
+                document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
+                document.getElementById("page_response").innerHTML = "Session Expired";
+                window.location.replace("./index.html");
             }
 
         })
