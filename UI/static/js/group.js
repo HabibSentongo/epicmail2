@@ -37,10 +37,12 @@ function create_group() {
                 document.getElementById("page_response").innerHTML = "Group Created";
                 window.location.replace("./inbox.html");
             }
-            else if (data.status === 401) {
+            else if (data.status === 400) {
                 document.getElementById("page_response").style.display = "block";
                 document.getElementById("page_response").style.color = "red";
-                document.getElementById("page_response").innerHTML = "Session Expired";
+                document.getElementById("page_response").innerHTML = data.error;
+            }
+            else if (data.msg === "Token has expired") {
                 window.location.replace("./index.html");
             }
 
