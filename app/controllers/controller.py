@@ -406,7 +406,7 @@ class EndpointFunctions:
                 result = self.send_grp_email('group_emails',group_id)
                 return result
             return jsonify({
-                    'status': 400,
+                    'status': 401,
                     'data': [{
                         'message': 'You are not a member of this group'
                     }]

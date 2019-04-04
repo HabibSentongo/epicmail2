@@ -62,14 +62,14 @@ function add_member() {
                 document.getElementById("page_response").innerHTML = data.error;
                 ;
             }
+            else if (data.status === 401) {
+                document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
+                document.getElementById("page_response").innerHTML = data.error;
+                ;
+            }
             else if (data.msg === "Token has expired") {
                 window.location.replace("./index.html");
             }
-            else if (data.status === 400) {
-                document.getElementById("page_response").style.display = "block";
-                document.getElementById("page_response").style.color = "red";
-                document.getElementById("page_response").innerHTML = data.data[0]['message'];
-            }
-
         })
 }
