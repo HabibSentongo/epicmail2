@@ -53,10 +53,13 @@ function send_mail() {
                 document.getElementById("page_response").innerHTML = "Unregistered Recipient";
                 email.setCustomValidity("Unregistered Recipient.");
             }
-            else if (data.status === 401) {
+            else if (data.status === 400) {
                 document.getElementById("page_response").style.display = "block";
                 document.getElementById("page_response").style.color = "red";
-                document.getElementById("page_response").innerHTML = "Session Expired";
+                document.getElementById("page_response").innerHTML = data.error;
+                ;
+            }
+            else if (data.msg === "Token has expired") {
                 window.location.replace("./index.html");
             }
         })

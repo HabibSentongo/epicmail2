@@ -3,16 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>EpicMail || create group</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="static/main.css" />
-    <script src="static/main.js"></script>
-</head><!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>EpicMail || compose</title>
+    <title>EpicMail || Rename Group</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="static/main.css" />
     <script src="static/main.js"></script>
@@ -22,7 +13,7 @@
             <div class="container">
                 <div class="logo">
                     
-                    <a href="groupchat.html">
+                    <a href="editname.html">
                             <img src="static/img/epic.png" alt="EpicMail Logo" height="70" >
                         </a>
                         <h1>EpicMail</h1> 
@@ -31,7 +22,7 @@
         </header>
 
     <section id="page" >
-        <h3 id="heading">COMPOSE NEW GROUP MAIL</h3>
+        <h3 id="heading">EDIT GROUP NAME</h3>
         <nav id="sidenav">
             <ul>
                 <li ><a href="inbox.html">Inbox</a></li>
@@ -49,12 +40,11 @@
         </nav>
     <div id="mailist">
         <div class="mailinputs" >
-            <form action="#" method="GET" onsubmit="send_group_mail(); return false">
+            <form action="#" method="GET" onsubmit="add_member(); return false">
                 <br><br>
-                <input type="text" placeholder="Group ID ...." required id="to"><span id="email_error"></span><br>
-                <input type="text" placeholder="Subject ...." required id="subject"><br>
-                <textarea name="mailbody" id="mailbody" cols="45" rows="5" placeholder="Type here ...." id="body"></textarea><span id="page_response"></span><br>
-                <button type="submit" class="button1" id="send">Send</button>         <button type="submit" class="button1" id="draft">Save as Draft</button>          <button class="button1" type="reset">Discard</button>
+                <input type="text" placeholder="New Name ...." required id="new_name"><span id="name_error"></span>
+                <input type="text" placeholder="Group ID ...." required id="group_id"><span id="gid_error"></span><br><span id="page_response"></span>
+                <button type="submit" class="button1" id="add">RENAME</button>           <button class="button1" type="reset">Discard</button>
             </form>
         </div>
     </section>
@@ -65,5 +55,5 @@
     </footer>
     
 </body>
-<script src="static/js/send_group_mail.js"></script>
+<script src="static/js/editname.js"></script>
 </html>
