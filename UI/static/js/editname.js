@@ -32,7 +32,7 @@ group_id.onkeyup = function group_id_validation() {
     }
 }
 
-function add_member() {
+function rename() {
     let group = {
         new_name: name.value
     };
