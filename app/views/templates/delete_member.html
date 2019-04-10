@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>EpicMail || drafts</title>
+    <title>EpicMail || Remove Member</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="static/main.css" />
-    <script src="static/main.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/main.css" />
+    <script src="../static/main.js"></script>
 </head>
 <body>
     <header>
             <div class="container">
                 <div class="logo">
                     
-                    <a href="drafts.html">
-                            <img src="static/img/epic.png" alt="EpicMail Logo" height="70" >
+                    <a href="delete_member.html">
+                            <img src="../static/img/epic.png" alt="EpicMail Logo" height="70" >
                         </a>
                         <h1>EpicMail</h1> 
                 </div>
@@ -22,7 +22,7 @@
         </header>
 
     <section id="page" >
-        <h3 id="heading">DRAFTS</h3>
+        <h3 id="heading">REMOVE GROUP MEMBER</h3>
         <nav id="sidenav">
             <ul>
                 <li ><a href="inbox.html">Inbox</a></li>
@@ -35,20 +35,25 @@
                 <li ><a href="mygroups.html">My Groups</a></li>
                 <li ><a href="editname.html">Rename Group</a></li>
                 <li ><a href="delete_member.html">Remove Member</a></li>
-                <li ><a href="index.html">Sign Out</a></li>
+                <li ><a href="#" onclick="logout()">Sign Out</a></li>
             </ul>
         </nav>
     <div id="mailist">
-        
-    </div>   
+        <div class="mailinputs" >
+            <form action="#" method="GET" onsubmit="remove_member(); return false">
+                <br><br>
+                <input type="text" placeholder="User ID ...." required id="user_id"><span id="uid_error"></span>
+                <input type="text" placeholder="Group ID ...." required id="group_id"><span id="gid_error"></span><br><span id="page_response"></span>
+                <button type="submit" class="button1" id="add">REMOVE</button>           <button class="button1" type="reset">Discard</button>
+            </form>
+        </div>
     </section>
     <footer>
         <div class="footer-info">
             <b><p id="footext">All Rights reserved. T&Cs apply. </p>
-            <p>EpicMail</p></b>
         </div>
     </footer>
     
 </body>
-<script src="static/js/drafts.js"></script>
+<script src="../static/js/removemember.js"></script>
 </html>

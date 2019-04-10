@@ -105,11 +105,10 @@ function signup_user() {
             }
             else if (data.status === 201) {
                 document.getElementById("page_response").style.display = "block";
-                document.getElementById("page_response").style.color = "red";
+                document.getElementById("page_response").style.color = "green";
                 document.getElementById("page_response").innerHTML = "Signed up Successfuly";
                 token=data.data[0]['token'];
                 localStorage.setItem('token', token);
-                console.log(token);
                 window.location.replace("./inbox.html");
             }
 
