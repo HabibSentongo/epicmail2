@@ -110,12 +110,21 @@ class EndpointFunctions:
                 'error': StaticStrings.error_savemode
             })
 
-        if 'reciever_id' not in mail_details:
+        if 'reciever_email' not in mail_details:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_missdestination
             })
-        
+
+        reciever_email = mail_details.get("reciever_email")
+        db_obj.my_cursor.execute(StaticStrings.id_selector.format(reciever_email))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)<0:
+            return jsonify({
+                'status': 404,
+                'error': StaticStrings.error_missdestination
+            })
+
         subject = mail_details.get("subject")
         parent_message_id = mail_details.get("parent_message_id")
         sender_status = mail_details.get("sender_status")
@@ -123,7 +132,7 @@ class EndpointFunctions:
         if sender_status == 'sent':
             reciever_status = 'unread'
         sender_id = current_Uid
-        reciever_id = mail_details.get("reciever_id")
+        reciever_id = data[0]['user_id']
         message_details = mail_details.get("message_details")
 
         db_obj.my_cursor.execute(StaticStrings.create_email.format(recipient_table,subject, parent_message_id, sender_status, sender_id, reciever_id, reciever_status, message_details))
@@ -148,7 +157,7 @@ class EndpointFunctions:
 
         db_obj.my_cursor.execute(StaticStrings.single_selector.format('users', 'email_address', email_address))
         data = db_obj.my_cursor.fetchall()
-        if len(data)>0:
+        if not data:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_email_exist
