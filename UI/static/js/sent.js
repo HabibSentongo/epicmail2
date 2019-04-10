@@ -1,5 +1,5 @@
-function get_recieved() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/messages";
+function get_sent() {
+    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/messages/sent";
     let token = localStorage.getItem("token");
     let fetched = '';
     fetch(url, {
@@ -24,10 +24,10 @@ function get_recieved() {
                     console.log(mails)
                     mails.forEach(mail => {
                     fetched +=`
-                    <div class="email" onclick="mailDetails()">
+                   <div class="email" onclick="mailDetails()">
                     <p class="topic">${mail.subject} <span id="dots">.....</span></p>
                     <p id="msg">${mail.message_details}<br><br></p>
-                    <a href="new.html"><button class="inBtn">Reply</button></a><a href="new.html"><button class="inBtn">Foward</button></a>
+                    <a href="sent.html"><button class="inBtn">Retract</button></a><a href="new.html"><button class="inBtn">Foward</button></a>
                     </div>
                     `
                     })
@@ -35,7 +35,7 @@ function get_recieved() {
                 if(data.status === 404){
                     fetched +=`   
                     <div class="email">
-                    <p class="topic">You Have Not Recieved any Emails Yet!!<br><br></p>
+                    <p class="topic">You Have Not Sent any Emails Yet!!<br><br></p>
                     </div>
                     `;
                     }
@@ -44,4 +44,4 @@ function get_recieved() {
         })
         .catch((error) => console.log(error));
 }
-get_recieved()
+get_sent()
