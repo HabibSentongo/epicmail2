@@ -1,35 +1,44 @@
-let email = document.getElementById("to");
+let group_id = document.getElementById("to");
 let subject = document.getElementById("subject");
-let body = document.getElementById("body");
-let send = document.getElementById("send");
+let mailbody = document.getElementById("body");
 let token = localStorage.getItem('token')
+let url = ""
 console.log(token);
 
-function email_validation(){
-    let email_error = document.getElementById("email_error");
-    if (/\S+@\S+\.\S+/.test(email.value)){
-        email_error.style.display = "none";
-        email.setCustomValidity("")
-    }
-    else {
-        email_error.style.display = "block";
-        email_error.style.color = "red";
-        email_error.innerHTML = "Enter correct email";
-        email.setCustomValidity("Wrong Email Format.")
+function logout() {
+    localStorage.removeItem('token');
+    window.location.replace("./index.html");
+}
+window.onload = function not_signedin(){
+    if(token === null){
+        window.location.replace("./index.html");
     }
 }
-email.onkeyup = email_validation;
-email.onchange = email_validation;
 
-function send_mail() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/messages";
+group_id.onkeyup = function group_id_validation() {
+    let email_error = document.getElementById("email_error");
+    if (/^[0-9]{1,}$/.test(group_id.value)) {
+        email_error.style.display = "none";
+        group_id.setCustomValidity("");
+        url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/groups/"+group_id.value+"/messages";
+        console.log(url)
+    } else {
+        email_error.style.display = "block";
+        email_error.style.color = "red";
+        email_error.innerHTML = "Group ID must be an integer";
+        group_id.setCustomValidity("Invalid Group ID.");
+    }
+}
+
+function send_group_mail() {
     let new_mail = {
         subject: subject.value,
         parent_message_id: 0,
         sender_status: "sent",
-        reciever_email: email.value,
-        message_details: subject.value
+        reciever_id: group_id.value,
+        message_details: mailbody.value
     };
+    
 
     fetch(url, {
         method: "POST",
@@ -50,8 +59,13 @@ function send_mail() {
             else if (data.status === 404) {
                 document.getElementById("page_response").style.display = "block";
                 document.getElementById("page_response").style.color = "red";
-                document.getElementById("page_response").innerHTML = "Unregistered Recipient";
+                document.getElementById("page_response").innerHTML = "Group Doesn't Exist";
                 email.setCustomValidity("Unregistered Recipient.");
+            }
+            else if (data.status === 401) {
+                document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
+                document.getElementById("page_response").innerHTML = "You are not a member of this group";
             }
             else if (data.status === 400) {
                 document.getElementById("page_response").style.display = "block";

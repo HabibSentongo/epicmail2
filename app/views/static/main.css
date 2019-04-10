@@ -139,7 +139,7 @@ input{
 #sidenav{
     border-radius: 5%;
     float: left;
-    width: 10%;
+    width: 12%;
     background: rgb(206, 224, 228);
     padding-left: 5%;
     height: 100%;
@@ -162,8 +162,13 @@ input{
     font-size: 18px;
 }
 
+/* a.active {
+    background-color: #f383ef; */
+
+}
+
 #sidenav ul :hover{
-    color: aquamarine;
+    color: rgba(8, 8, 8, 0.055);
 }
 
 #mailist{
@@ -192,10 +197,6 @@ footer{
 }
 .email:hover{
     background-color:rgb(206, 224, 228);
-}
-
-#msg{
-    display: none;
 }
 
 form button{

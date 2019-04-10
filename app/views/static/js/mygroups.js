@@ -1,6 +1,17 @@
+let token = localStorage.getItem("token");
+
+function logout() {
+    localStorage.removeItem('token');
+    window.location.replace("./index.html");
+}
+window.onload = function not_signedin(){
+    if(token === null){
+        window.location.replace("./index.html");
+    }
+}
+
 function get_groups() {
     let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/groups";
-    let token = localStorage.getItem("token");
     let fetched = '';
     fetch(url, {
         method: "GET",
@@ -23,10 +34,12 @@ function get_groups() {
                     let groups = data["data"];
                     console.log(groups)
                     groups.forEach(group => {
+                        id_dots="dots"+group.group_id;
+                        id_body="msg"+group.group_id;
                     fetched +=`
-                    <div class="email" onclick="mailDetails()">
-                    <p class="topic">Name: ${group.group_name} <span id="dots">.....</span></p>
-                    <p id="msg">Members: ${group.members}<br>Group ID: ${group.group_id}<br><br></p>
+                    <div class="email" onclick="mailDetails('${id_dots}','${id_body}')">
+                    <p class="topic">Name: ${group.group_name} <span id='${id_dots}'>.....</span></p>
+                    <p id='${id_body}' style="display: none">Members: ${group.members}<br>Group ID: ${group.group_id}<br><br></p>
                     </div>
                     `
                     })
