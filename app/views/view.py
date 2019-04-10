@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims)
 from flasgger import Swagger, swag_from
 from ..controllers.controller import EndpointFunctions

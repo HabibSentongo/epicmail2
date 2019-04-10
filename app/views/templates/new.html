@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EpicMail || compose</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/main.css" />
+    <script src="../static/main.js"></script>
+</head>
+<body>
+    <header>
+            <div class="container">
+                <div class="logo">
+                    
+                    <a href="new.html">
+                            <img src="../static/img/epic.png" alt="EpicMail Logo" height="70" >
+                        </a>
+                        <h1>EpicMail</h1> 
+                </div>
+            </div>
+        </header>
+
+    <section id="page" >
+        <h3 id="heading">COMPOSE NEW MAIL</h3>
+        <nav id="sidenav">
+            <ul>
+                <li ><a href="inbox.html">Inbox</a></li>
+                <li ><a href="new.html">Compose</a></li>
+                <li ><a href="sent.html">Sent</a></li>
+                <li ><a href="drafts.html">Drafts</a></li>
+                <li ><a href="group.html">Create Group</a></li>
+                <li ><a href="groupmail.html">Group Chat</a></li>
+                <li ><a href="addmembers.html">Add Member</a></li>
+                <li ><a href="mygroups.html">My Groups</a></li>
+                <li ><a href="editname.html">Rename Group</a></li>
+                <li ><a href="delete_member.html">Remove Member</a></li>
+                <li ><a href="#" onclick="logout()">Sign Out</a></li>
+            </ul>
+        </nav>
+    <div id="mailist">
+        <div class="mailinputs" >
+            <form action="#" method="GET" onsubmit="send_mail(); return false">
+                <br><br>
+                <input type="text" placeholder="To ...." required id="to"><span id="email_error"></span><br>
+                <input type="text" placeholder="Subject ...." required id="subject"><br>
+                <textarea name="mailbody" cols="45" rows="5" placeholder="Type here ...." id="body"></textarea><span id="page_response"></span><br>
+                <button type="submit" class="button1" id="send">Send</button>         <button type="submit" class="button1" id="draft">Save as Draft</button>          <button class="button1" type="reset">Discard</button>
+            </form>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-info">
+            <b><p id="footext">All Rights reserved. T&Cs apply. </p>
+        </div>
+    </footer>
+    
+</body>
+<script src="../static/js/sendmail.js"></script>
+</html>

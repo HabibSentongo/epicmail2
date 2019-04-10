@@ -1,6 +1,6 @@
-function mailDetails() {
-    var dots = document.getElementById("dots");
-    var msgContent = document.getElementById("msg");
+function mailDetails(dotss,msg) {
+    var dots = document.getElementById(dotss);
+    var msgContent = document.getElementById(msg);
   
     if (dots.style.display === "none") {
       dots.style.display = "inline";

@@ -61,7 +61,6 @@ header .current-page a{
 
 
 header li{
-    float: left;
     display: inline;
     padding: 0 20px 0 10px;
 
@@ -139,7 +138,7 @@ input{
 #sidenav{
     border-radius: 5%;
     float: left;
-    width: 10%;
+    width: 12%;
     background: rgb(206, 224, 228);
     padding-left: 5%;
     height: 100%;
@@ -163,7 +162,7 @@ input{
 }
 
 #sidenav ul :hover{
-    color: aquamarine;
+    color: rgba(8, 8, 8, 0.055);
 }
 
 #mailist{
@@ -177,7 +176,7 @@ footer{
     width: 100%;
     background: rgb(206, 224, 228);
    text-align: center;
-    height: 15%; 
+    height: 7%; 
 }
 .email{
     background: #afbebe;
@@ -192,10 +191,6 @@ footer{
 }
 .email:hover{
     background-color:rgb(206, 224, 228);
-}
-
-#msg{
-    display: none;
 }
 
 form button{

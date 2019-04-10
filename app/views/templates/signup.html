@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>EpicMail || Sign Up</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="static/main.css" />
-    <script src="static/main.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/main.css" />
+    <script src="../static/main.js"></script>
 </head>
 <body>
     <header>
@@ -14,7 +14,7 @@
                 <div class="logo">
                     
                     <a href="signup.html">
-                            <img src="static/img/epic.png" alt="EpicMail Logo" height="70" >
+                            <img src="../static/img/epic.png" alt="EpicMail Logo" height="70" >
                         </a>
                         <h1>EpicMail</h1> 
                 </div>
@@ -38,13 +38,14 @@
                     </div> 
                  
                 <div class="inputs" >
-                    <form action="inbox.html" method="GET">
+                    <form action="#" method="GET" onsubmit="signup_user(); return false">
                         <br><br>
-                        <input type="text" placeholder="Enter Your Names..." required><br>
-                        <input type="text" placeholder="Choose a username..." required><br>
-                        <input type="password" placeholder="Create Password..." required><br>
-                        <input type="password" placeholder="Confirm Password..." required><br>
-                        <button type="submit" class="button1">signup</button>
+                        <input type="text" placeholder="Enter Your Email..." required id="email_address"><span id="email_error"></span><br>
+                        <input type="text" placeholder="First Name..." required id="first_name"><span id="first_name_error"></span><br>
+                        <input type="text" placeholder="Last Name..." required id="last_name"><span id="last_name_error"></span><br>
+                        <input type="password" placeholder="Create Password..." required id="password"><span id="password_error"></span><br>
+                        <input type="password" placeholder="Confirm Password..." required id="confirm"><span id="password_two_error"></span><br>
+                        <button type="submit" class="button1">signup</button><span id="page_response"></span>
                         <p>Already on EpicMail? <a href="index.html">Sign In</a></p>
                     </form>
                 </div>
@@ -52,10 +53,10 @@
     </section>
     <footer>
         <div class="footer-info">
-            <b><p id="footext">All Rights reserved. T&Cs apply. </p>
-                <p>EpicMail</p></b>
+            <b><p id="footext">All Rights reserved. T&Cs apply.</p></b>
         </div>
     </footer>
     
 </body>
+<script src="../static/js/signup.js"></script>
 </html>

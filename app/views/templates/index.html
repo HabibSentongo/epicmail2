@@ -5,23 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>EpicMail || login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="static/main.css" />
-    <script src="static/main.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/main.css" />
+    <script src="../static/main.js"></script>
 </head>
 <body>
     <header>
             <div class="container">
                 <div class="logo">
                     
-                    <a href="index.html">
-                            <img src="static/img/epic.png" alt="EpicMail Logo" height="70" >
+                    <a href="./index.html">
+                            <img src="../static/img/epic.png" alt="EpicMail Logo" height="70" >
                         </a>
                         <h1>EpicMail</h1> 
                 </div>
                 <nav>
                     <ul>
-                        <li ><a href="index.html">Sign In</a></li>
-                        <li ><a href="signup.html">Sign Up</a></li>
+                        <li ><a href="./index.html">Sign In</a></li>
+                        <li ><a href="./signup.html">Sign Up</a></li>
                     </ul>
                 </nav>
             </div>
@@ -36,13 +36,13 @@
                     <p>EpicMail wishes to empower lives by helping people to conveniently and securely exchange messages/information over the internet. </p>
                 </div>  
                 <div class="inputs" >
-                    <form method="GET" action="inbox.html">
-                        <br><br>
-                        <input type="text" placeholder="Enter Username" required><br>
-                        <input type="password" placeholder="Password" required><br>
-                        <button type="submit" class="button1">Login</button><br><br>
+                    <form action="#" method="GET" onsubmit="signin_user(); return false">
+                        <br>
+                        <input type="text" placeholder="Enter Email" required id="email"><span id="email_error"></span><br>
+                        <input type="password" placeholder="Password" required id="password"><br>
+                        <button type="submit" class="button1">Login</button><span id="page_response"></span><br><br>
                         <a href="password_reset.html">Forgot Password?</a>
-                        <p>Not on EpicMail yet? <a href="signup.html">Sign Up</a></p>
+                        <p>Not on EpicMail yet? <a href="./signup.html">Sign Up</a></p>
                     </form>
                 </div>
             </div>
@@ -50,9 +50,9 @@
     <footer>
         <div class="footer-info">
             <b><p id="footext">All Rights reserved. T&Cs apply. </p>
-            <p>EpicMail</p></b>
         </div>
     </footer>
     
 </body>
+<script src="../static/js/signin.js"></script>
 </html>
