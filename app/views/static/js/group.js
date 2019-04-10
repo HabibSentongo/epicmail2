@@ -1,8 +1,16 @@
-let name = document.getElementById("new_name");
-let group_id = document.getElementById("group_id");
-let token = localStorage.getItem('token');
+let name = document.getElementById("gname");
+let token = localStorage.getItem('token')
 console.log(token);
-let url = "";
+
+function logout() {
+    localStorage.removeItem('token');
+    window.location.replace("./index.html");
+}
+window.onload = function not_signedin(){
+    if(token === null){
+        window.location.replace("./index.html");
+    }
+}
 
 name.onkeyup = function name_validation() {
     let name_error = document.getElementById("name_error");
@@ -17,52 +25,32 @@ name.onkeyup = function name_validation() {
     }
 }
 
-group_id.onkeyup = function group_id_validation() {
-    let email_error = document.getElementById("gid_error");
-    if (/^[1-9]{1,}$/.test(group_id.value)) {
-        email_error.style.display = "none";
-        group_id.setCustomValidity("");
-        url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/groups/"+group_id.value+"/name";
-        console.log(url)
-    } else {
-        email_error.style.display = "block";
-        email_error.style.color = "red";
-        email_error.innerHTML = "Group ID must be an integer";
-        group_id.setCustomValidity("Invalid Group ID.");
-    }
-}
-
-function rename() {
-    let group = {
-        new_name: name.value
+function create_group() {
+    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/groups";
+    let new_group = {
+        group_name: name.value
     };
 
     fetch(url, {
-        method: "PATCH",
+        method: "POST",
         headers: {
             "content-type": "application/json",
             "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(group)
+        body: JSON.stringify(new_group)
     })
         .then((response) => response.json())
         .then((data) => {
-            if (data.status === 200) {
+            if (data.status === 201) {
                 document.getElementById("page_response").style.display = "block";
                 document.getElementById("page_response").style.color = "green";
-                document.getElementById("page_response").innerHTML = "Group Renamed";
+                document.getElementById("page_response").innerHTML = "Group Created";
                 window.location.replace("./mygroups.html");
-            }
-            else if (data.status === 401) {
-                document.getElementById("page_response").style.display = "block";
-                document.getElementById("page_response").style.color = "red";
-                document.getElementById("page_response").innerHTML = data.error;
             }
             else if (data.status === 400) {
                 document.getElementById("page_response").style.display = "block";
                 document.getElementById("page_response").style.color = "red";
                 document.getElementById("page_response").innerHTML = data.error;
-                ;
             }
             else if (data.msg === "Token has expired") {
                 window.location.replace("./index.html");

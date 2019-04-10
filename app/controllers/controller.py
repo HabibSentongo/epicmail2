@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request, json
+from flask import Flask, jsonify, request, json, render_template
+import jinja2
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_claims, decode_token)
 from database.db import DBmigrate
 from ..models.mail_model import StaticStrings
@@ -7,27 +8,9 @@ db_obj = DBmigrate()
 db_obj.create_tables()
 
 class EndpointFunctions:
+
     def home(self):
-        return jsonify({'status': 200,
-                        'data': ['Welcome to Sentongo\'s EpicMail!',
-                                'Endpoints',
-                                '01 : POST /api/v2/auth/signup',
-                                '02 : POST /api/v2/auth/login',
-                                '03 : POST /api/v2/messages',
-                                '04 : GET /api/v2/messages',
-                                '05 : GET /api/v2/messages/unread',
-                                '06 : GET /api/v2/messages/sent',
-                                '07 : GET /api/v2/messages/<message-id>',
-                                '08 : DELETE /api/v2/messages/<message-id>',
-                                '09 : POST /api/v2/groups',
-                                '10 : DELETE /api/v2/groups/<int:group_id>',
-                                '11 : POST /api/v2/groups/<int:group_id>/users',
-                                '12 : DELETE /api/v2/groups/<int:group_id>/users/<int:user_id>',
-                                '13 : PATCH /api/v2/groups/<int:group_id>/name',
-                                '14 : GET /api/v2/groups',
-                                '15 : POST /api/v2/groups/<int:group_id>/messages',
-                                '16 : POST /api/v2/auth/reset']
-                                    })
+        return render_template('index.html')
 
     def get_id_from_header_token(self):
         header = request.headers.get('Authorization','')

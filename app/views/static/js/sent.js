@@ -1,6 +1,17 @@
-function get_recieved() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/messages";
-    let token = localStorage.getItem("token");
+let token = localStorage.getItem("token");
+
+function logout() {
+    localStorage.removeItem('token');
+    window.location.replace("./index.html");
+}
+window.onload = function not_signedin(){
+    if(token === null){
+        window.location.replace("./index.html");
+    }
+}
+
+function get_sent() {
+    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/messages/sent";
     let fetched = '';
     fetch(url, {
         method: "GET",
@@ -23,11 +34,13 @@ function get_recieved() {
                     let mails = data["data"];
                     console.log(mails)
                     mails.forEach(mail => {
+                        id_dots="dots"+mail.mail_id;
+                        id_body="msg"+mail.mail_id;
                     fetched +=`
-                    <div class="email" onclick="mailDetails()">
-                    <p class="topic">${mail.subject} <span id="dots">.....</span></p>
-                    <p id="msg">${mail.message_details}<br><br></p>
-                    <a href="new.html"><button class="inBtn">Reply</button></a><a href="new.html"><button class="inBtn">Foward</button></a>
+                   <div class="email" onclick="mailDetails('${id_dots}','${id_body}')">
+                    <p class="topic">${mail.subject} <span id='${id_dots}'>.....</span></p>
+                    <p id='${id_body}' style="display: none">${mail.message_details}<br></p>
+                    <a href="sent.html"><button class="inBtn">Retract</button></a><a href="new.html"><button class="inBtn">Foward</button></a>
                     </div>
                     `
                     })
@@ -35,7 +48,7 @@ function get_recieved() {
                 if(data.status === 404){
                     fetched +=`   
                     <div class="email">
-                    <p class="topic">You Have Not Recieved any Emails Yet!!<br><br></p>
+                    <p class="topic">You Have Not Sent any Emails Yet!!<br><br></p>
                     </div>
                     `;
                     }
@@ -44,4 +57,4 @@ function get_recieved() {
         })
         .catch((error) => console.log(error));
 }
-get_recieved()
+get_sent()
