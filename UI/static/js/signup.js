@@ -58,7 +58,7 @@ first_name.onkeyup = function name_validation() {
         first_name.setCustomValidity("");
     } else {
         first_name_error.style.display = "block";
-        first_name_error.innerHTML = "Name must be more than one letter";
+        first_name_error.innerHTML = "Name must be more than one letter and only alphabets";
         first_name.setCustomValidity("Invalid Name.");
     }
 }
@@ -70,7 +70,7 @@ last_name.onkeyup = function names_validation() {
         last_name.setCustomValidity("");
     } else {
         last_name_error.style.display = "block";
-        last_name_error.innerHTML = "Name must be more than one letter";
+        last_name_error.innerHTML = "Name must be more than one letter and only alphabets";
         last_name.setCustomValidity("Invalid Name.");
     }
 }
