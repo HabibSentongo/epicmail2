@@ -11,7 +11,7 @@ window.onload = function not_signedin(){
 }
 
 function get_sent() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/messages/sent";
+    let url = "./api/v2/messages/sent";
     let fetched = '';
     fetch(url, {
         method: "GET",

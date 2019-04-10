@@ -61,7 +61,6 @@ header .current-page a{
 
 
 header li{
-    float: left;
     display: inline;
     padding: 0 20px 0 10px;
 
@@ -160,11 +159,6 @@ input{
     bottom: 10%;
     font-weight: bold;
     font-size: 18px;
-}
-
-/* a.active {
-    background-color: #f383ef; */
-
 }
 
 #sidenav ul :hover{

@@ -10,7 +10,7 @@ window.onload = function not_signedin(){
     }
 }
 function get_recieved() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/messages";
+    let url = "./api/v2/messages";
     let fetched = '';
     fetch(url, {
         method: "GET",

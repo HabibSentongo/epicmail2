@@ -26,7 +26,7 @@ name.onkeyup = function name_validation() {
 }
 
 function create_group() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/groups";
+    let url = "./api/v2/groups";
     let new_group = {
         group_name: name.value
     };

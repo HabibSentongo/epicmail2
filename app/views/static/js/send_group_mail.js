@@ -1,8 +1,8 @@
 let group_id = document.getElementById("to");
 let subject = document.getElementById("subject");
-let mailbody = document.getElementById("body");
-let token = localStorage.getItem('token')
-let url = ""
+let mailbody = document.getElementById("mailbody");
+let token = localStorage.getItem('token');
+let url = "";
 console.log(token);
 
 function logout() {
@@ -20,8 +20,8 @@ group_id.onkeyup = function group_id_validation() {
     if (/^[0-9]{1,}$/.test(group_id.value)) {
         email_error.style.display = "none";
         group_id.setCustomValidity("");
-        url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/groups/"+group_id.value+"/messages";
-        console.log(url)
+        url = "./api/v2/groups/"+group_id.value+"/messages";
+        console.log(url);
     } else {
         email_error.style.display = "block";
         email_error.style.color = "red";

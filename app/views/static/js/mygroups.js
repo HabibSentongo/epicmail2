@@ -11,7 +11,7 @@ window.onload = function not_signedin(){
 }
 
 function get_groups() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/groups";
+    let url = "./api/v2/groups";
     let fetched = '';
     fetch(url, {
         method: "GET",
