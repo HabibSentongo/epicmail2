@@ -14,6 +14,7 @@ group_id.onkeyup = function group_id_validation() {
         console.log(url)
     } else {
         email_error.style.display = "block";
+        email_error.style.color = "red";
         email_error.innerHTML = "Group ID must be an integer";
         group_id.setCustomValidity("Invalid Group ID.");
     }
@@ -40,17 +41,26 @@ function send_group_mail() {
         .then((data) => {
             if (data.status === 201) {
                 document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "green";
                 document.getElementById("page_response").innerHTML = "Message Sent";
                 window.location.replace("./sent.html");
             }
             else if (data.status === 404) {
                 document.getElementById("page_response").style.display = "block";
-                document.getElementById("page_response").innerHTML = "Unregistered Recipient";
+                document.getElementById("page_response").style.color = "red";
+                document.getElementById("page_response").innerHTML = "Group Doesn't Exist";
                 email.setCustomValidity("Unregistered Recipient.");
             }
             else if (data.status === 400) {
                 document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
                 document.getElementById("page_response").innerHTML = "You are not a member of this group";
+            }
+            else if (data.status === 401) {
+                document.getElementById("page_response").style.display = "block";
+                document.getElementById("page_response").style.color = "red";
+                document.getElementById("page_response").innerHTML = "Session Expired";
+                window.location.replace("./index.html");
             }
         })
 }

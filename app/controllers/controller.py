@@ -157,7 +157,7 @@ class EndpointFunctions:
 
         db_obj.my_cursor.execute(StaticStrings.single_selector.format('users', 'email_address', email_address))
         data = db_obj.my_cursor.fetchall()
-        if not data:
+        if data:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_email_exist
@@ -196,7 +196,7 @@ class EndpointFunctions:
             })
         return jsonify({
                     'status': 404,
-                    'error': 'Bad email and/or password'
+                    'error': 'Wrong email and/or password'
                 })
 
     def create_group(self):
@@ -239,13 +239,22 @@ class EndpointFunctions:
     def add_member(self, key):
         current_Uid = self.get_id_from_header_token()
         user = request.get_json()
-        if not request.json or 'user_id' not in user:
+        if not request.json or 'user_email' not in user:
             return jsonify({
                 'status': 400,
                 'error': StaticStrings.error_bad_data
             })
+
+        user_email = user.get("user_email")
+        db_obj.my_cursor.execute(StaticStrings.id_selector.format(user_email))
+        data = db_obj.my_cursor.fetchall()
+        if len(data)<1:
+            return jsonify({
+                'status': 404,
+                'error': "No Such User on the System"
+            })
         
-        user_id = user.get("user_id")
+        user_id = data[0]['user_id']
         db_obj.my_cursor.execute(StaticStrings.two_id_selector.format('groups','group_id',key,'admin',current_Uid,'admin',current_Uid))
         data = db_obj.my_cursor.fetchall()
         if len(data)>0:
@@ -392,7 +401,7 @@ class EndpointFunctions:
         current_Uid = self.get_id_from_header_token()
         db_obj.my_cursor.execute(StaticStrings.single_id_selector.format('*','groups','group_id',group_id))
         data = db_obj.my_cursor.fetchall()
-        if data:
+        if len(data)>0:
             if current_Uid in data[0]['members']:
                 result = self.send_grp_email('group_emails',group_id)
                 return result
