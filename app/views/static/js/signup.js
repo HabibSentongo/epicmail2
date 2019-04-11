@@ -81,7 +81,7 @@ last_name.onkeyup = function names_validation() {
 }
 
 function signup_user() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/auth/signup";
+    let url = "./api/v2/auth/signup";
     let new_user = {
         first_name: first_name.value,
         last_name: last_name.value,

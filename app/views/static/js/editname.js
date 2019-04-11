@@ -32,7 +32,7 @@ group_id.onkeyup = function group_id_validation() {
     if (/^[0-9]{1,}$/.test(group_id.value)) {
         email_error.style.display = "none";
         group_id.setCustomValidity("");
-        url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/groups/"+group_id.value+"/name";
+        url = "./api/v2/groups/"+group_id.value+"/name";
         console.log(url)
     } else {
         email_error.style.display = "block";

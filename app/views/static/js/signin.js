@@ -17,7 +17,7 @@ email.onkeyup = email_validation;
 email.onchange = email_validation;
 
 function signin_user() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/auth/signin";
+    let url = "./api/v2/auth/signin";
     let new_user = {
         email_address: email.value,
         password: password.value,

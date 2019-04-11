@@ -1,7 +1,7 @@
 let email = document.getElementById("to");
 let subject = document.getElementById("subject");
 let mailbody = document.getElementById("body");
-let token = localStorage.getItem('token')
+let token = localStorage.getItem('token');
 console.log(token);
 
 function logout() {
@@ -18,7 +18,7 @@ email.onkeyup = function email_validation(){
     let email_error = document.getElementById("email_error");
     if (/\S+@\S+\.\S+/.test(email.value)){
         email_error.style.display = "none";
-        email.setCustomValidity("")
+        email.setCustomValidity("");
     }
     else {
         email_error.style.display = "block";
@@ -29,15 +29,14 @@ email.onkeyup = function email_validation(){
 }
 
 function send_mail() {
-    let url = "https://epicmail-sentongo-v2.herokuapp.com/api/v2/messages";
+    let url = "./api/v2/messages";
     let new_mail = {
         subject: subject.value,
         parent_message_id: 0,
         sender_status: "sent",
         reciever_email: email.value,
-        message_details: mailbody.value,
+        message_details: mailbody.value
     };
-    console.log(message_details)
 
     fetch(url, {
         method: "POST",
