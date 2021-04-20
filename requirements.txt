@@ -27,7 +27,7 @@ mistune==0.8.4
 more-itertools==5.0.0
 pluggy==0.8.0
 psycopg2==2.7.7
-py==1.7.0
+py==1.10.0
 pycodestyle==2.5.0
 PyJWT==1.4.2
 pylint==2.2.2
